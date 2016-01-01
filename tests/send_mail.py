@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import smtplib
 from smtplib import SMTP
 from mailbox import mbox
 from email.message import EmailMessage
@@ -16,13 +17,11 @@ def create_test_mail(msg_id):
     msg.set_content("Hello, World!")
     return msg
 
-def test_mail_sending(msg_id = "testing.mail@example.zeitmail.invalid"):
-    msg = create_test_mail(msg_id)
+def send_message(msg):
     with SMTP("zeitmail.local") as smtp:
         smtp.ehlo("tester.example.com")
         smtp.send_message(msg)
         smtp.quit()
-    return msg_id
 
 def check_mail_delivery(mbox_path, msg_id):
     for msg in mbox(mbox_path):
@@ -38,12 +37,28 @@ def truncate_file(path):
     f.truncate()
     f.close()
 
-def main():
+def test_open_relay():
+    test_msg_id2 = "open-relay.mail@exampe.zeitmail.invalid"
+    msg2 = create_test_mail(test_msg_id2)
+    msg2.replace_header("To", "open-relay@example.com")
+    try:
+        send_message(msg2)
+        return False
+    except smtplib.SMTPRecipientsRefused:
+        return True
+
+def test_default_mail_delivery():
     mbox_path = "./mail-mnt/test.mbox"
+    test_msg_id1 = "testing.mail@example.zeitmail.invalid"
+    msg1 = create_test_mail(test_msg_id1)
     truncate_file(mbox_path)
-    test_msg_id = test_mail_sending()
+    send_message(msg1)
     time.sleep(1)
-    assert(check_mail_delivery(mbox_path, test_msg_id))
+    assert(check_mail_delivery(mbox_path, test_msg_id1))
+
+def main():
+    test_default_mail_delivery()
+    test_open_relay()
 
 if __name__ == "__main__":
     main()
