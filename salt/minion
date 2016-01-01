@@ -1,0 +1,5 @@
+# -*- mode: yaml -*-
+
+id: zeitmail.local
+file_client: local
+log_level: info
