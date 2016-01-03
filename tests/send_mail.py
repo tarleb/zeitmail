@@ -1,10 +1,50 @@
 #!/usr/bin/env python3
 
+import mailbox
 import smtplib
-from smtplib import SMTP
-from mailbox import mbox
 from email.message import EmailMessage
 import time
+
+class SMTPParameters:
+    def __init__(self):
+        self.debug_level = 0
+        self.helo_name = 'tester.example.com'
+        self.host = 'zeitmail.local'
+        self.use_starttls = False
+
+    def create_connection(self):
+        """Creates a connection using these parameters."""
+        conn = smtplib.SMTP()
+        conn.set_debuglevel(self.debug_level)
+        conn.connect(self.host)
+        if self.helo_name is not None:
+            conn.helo(self.helo_name)
+        if self.use_starttls:
+            conn.starttls()
+        return conn
+
+class LocalMailbox:
+    def __init__(self, path, reset = True):
+        self.path = path
+        if reset:
+            self.reset()
+
+    def reset(self):
+        f = open(self.path, 'w')
+        f.truncate()
+        f.close()
+
+    def mailbox(self):
+        return mailbox.mbox(self.path)
+
+def get_test_mailbox():
+    return LocalMailbox("./mail-mnt/test.mbox")
+
+def send_message_with_params(msg, smtp_params):
+    """Send a message using specific SMTP parameters."""
+    with smtp_params.create_connection() as smtp:
+        smtp.send_message(msg)
+        smtp.quit()
 
 def create_test_mail(msg_id):
     recipient = "root@zeitmail.local"
@@ -18,13 +58,13 @@ def create_test_mail(msg_id):
     return msg
 
 def send_message(msg):
-    with SMTP("zeitmail.local") as smtp:
-        smtp.ehlo("tester.example.com")
-        smtp.send_message(msg)
-        smtp.quit()
+    params = SMTPParameters()
+    #params.debug_level = 1
+    params.host = "zeitmail.local"
+    send_message_with_params(msg, params)
 
-def check_mail_delivery(mbox_path, msg_id):
-    for msg in mbox(mbox_path):
+def check_mail_delivery(local_mailbox, msg_id):
+    for msg in local_mailbox.mailbox():
         cur_msg_id = msg["Message-Id"]
         if cur_msg_id == msg_id:
             return True
@@ -48,13 +88,12 @@ def test_open_relay():
         return True
 
 def test_default_mail_delivery():
-    mbox_path = "./mail-mnt/test.mbox"
+    mb = get_test_mailbox()
     test_msg_id1 = "testing.mail@example.zeitmail.invalid"
     msg1 = create_test_mail(test_msg_id1)
-    truncate_file(mbox_path)
     send_message(msg1)
     time.sleep(1)
-    assert(check_mail_delivery(mbox_path, test_msg_id1))
+    assert(check_mail_delivery(mb, test_msg_id1))
 
 def main():
     test_default_mail_delivery()
