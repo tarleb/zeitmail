@@ -2,6 +2,7 @@
 
 import mailbox
 import smtplib
+import ssl
 from email.message import EmailMessage
 import time
 
@@ -11,17 +12,24 @@ class SMTPParameters:
         self.helo_name = 'tester.example.com'
         self.host = 'zeitmail.local'
         self.use_starttls = False
+        self.force_starttls = False
 
     def create_connection(self):
         """Creates a connection using these parameters."""
-        conn = smtplib.SMTP()
+        conn = smtplib.SMTP(self.host)
         conn.set_debuglevel(self.debug_level)
-        conn.connect(self.host)
         if self.helo_name is not None:
-            conn.helo(self.helo_name)
-        if self.use_starttls:
-            conn.starttls()
+            conn.ehlo(self.helo_name)
+        if self.use_starttls and (conn.has_extn("STARTTLS") or self.force_starttls):
+            conn.starttls(context=self.create_insecure_ssl_context())
+            conn.ehlo(self.helo_name)
         return conn
+
+    def create_insecure_ssl_context(self):
+        ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        return ctx
 
 class LocalMailbox:
     def __init__(self, path, reset = True):
@@ -95,9 +103,22 @@ def test_default_mail_delivery():
     time.sleep(1)
     assert(check_mail_delivery(mb, test_msg_id1))
 
+def test_starttls_mail_delivery():
+    mb = get_test_mailbox()
+    test_msg_id = "testing.mail@example.zeitmail.invalid"
+    msg = create_test_mail(test_msg_id)
+    smtp_params = SMTPParameters()
+    smtp_params.use_starttls = True
+    smtp_params.force_starttls = True
+    smtp_params.debug_level = 1
+    send_message_with_params(msg, smtp_params)
+    time.sleep(2)
+    assert(check_mail_delivery(mb, test_msg_id))
+
 def main():
     test_default_mail_delivery()
     test_open_relay()
+    test_starttls_mail_delivery()
 
 if __name__ == "__main__":
     main()
