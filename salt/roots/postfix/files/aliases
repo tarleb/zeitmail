@@ -1,0 +1,24 @@
+# NOTE: Managed by Salt
+# /etc/aliases
+
+mailer-daemon: postmaster
+
+### RFC 2142 compliance
+
+# Business related mailbox names
+info: root
+
+# Network related
+abuse: root
+trouble: root
+noc: root
+security: root
+
+# Specific services
+postmaster: root
+hostmaster: root
+
+### Admin
+root: {{ grains.get('admin-user', 'vagrant') }}
+admin: root
+nobody: root
