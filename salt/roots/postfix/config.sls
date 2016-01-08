@@ -31,3 +31,12 @@ include:
       - pkg: postfix
     - watch_in:
       - service: postfix
+
+/etc/mailname:
+  file.managed:
+    - contents: {{grains['fqdn']}}
+    - user: root
+    - group: root
+    - mode: 644
+    - watch_in:
+      - service: postfix
