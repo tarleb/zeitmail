@@ -6,3 +6,4 @@
 
 # Mailbox file for tests
 tests/mail-mnt/test.mbox
+tests/__pycache__
