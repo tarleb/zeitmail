@@ -40,11 +40,24 @@ def test_receiving_via_starttls():
     time.sleep(1)
     assert(mailbox.contains_all(tester.messages))
 
+def test_submission_receiving():
+    """Tests that the server accepts mail via submission"""
+    mailbox = TesterMailbox()
+    params = SMTPParameters()
+    params.port = 587
+    params.authenticate = True
+    tester = SMTPTester(params)
+    tester.send()
+    tester.quit()
+    time.sleep(1)
+    assert(mailbox.contains_all(tester.messages))
+
 def main():
     """Executes all tests for mail receiving."""
     test_normal_mail_receiving()
     test_for_open_relay()
     test_receiving_via_starttls()
+    test_submission_receiving()
 
 if __name__ == '__main__':
     main()

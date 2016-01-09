@@ -17,6 +17,7 @@ class SMTPTester:
         msg = self.generate_message()
         self.ehlo()
         self.starttls()
+        self.authenticate()
         self.connection.send_message(msg)
 
     def ehlo(self):
@@ -29,6 +30,14 @@ class SMTPTester:
             ctx = self.params.create_ssl_context()
             self.connection.starttls(context=ctx)
             self.ehlo()
+
+    def authenticate(self):
+        """Trys to authenticate to the server"""
+        if not self.connection.has_extn("AUTH"):
+            return False
+        user = self.params.user
+        password = self.params.password
+        self.connection.login(user, password)
 
     def use_starttls(self):
         return (

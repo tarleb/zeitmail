@@ -19,6 +19,9 @@ class SMTPParameters:
         self.host = host
         self.enable_starttls = enable_starttls
         self.force_starttls = force_starttls
+        self.authenticate = False
+        self.user = "vagrant"
+        self.password = "vagrant"
 
     def create_connection(self):
         """Creates a connection using these parameters."""
