@@ -15,6 +15,10 @@ alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 recipient_delimiter = +
 
+## Authentication via SASL
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+
 ## User mailboxes
 mailbox_command = procmail -a "$EXTENSION"
 mailbox_size_limit = 0
