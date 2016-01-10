@@ -1,6 +1,7 @@
 base:
   '*':
     - iptables
+    - ssh
   'mail*':
     - apt
     - opendkim
