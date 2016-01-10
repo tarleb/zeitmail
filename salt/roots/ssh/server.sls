@@ -1,3 +1,6 @@
+include:
+  - .moduli
+
 # Generate RSA and ED25519 keys (unless already present)
 generate RSA ssh key:
   cmd.run:
@@ -12,13 +15,16 @@ generate ED25519 ssh key:
     - user: root
 
 openssh-server:
-  pkg.installed: []
+  pkg.installed:
+    - required_in:
+      - cmd: generate Diffie-Hellman moduli candidates
   service.running:
     - name: ssh
     - require:
       - pkg: openssh-server
       - cmd: generate RSA ssh key
       - cmd: generate ED25519 ssh key
+      - cmd: generate Diffie-Hellman moduli
     - watch:
       - pkg: openssh-server
       - cmd: generate RSA ssh key
