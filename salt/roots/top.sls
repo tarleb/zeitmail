@@ -1,4 +1,6 @@
 base:
+  '*':
+    - iptables
   'mail*':
     - apt
     - opendkim
