@@ -25,3 +25,25 @@ UseDNS no
 
 # Enable the SFTP subsystem
 Subsystem sftp /usr/lib/openssh/sftp-server
+
+# Encryption
+# ==========
+
+# This uses many recommendations given in Stribika's "Secure Secure Shell"
+# article: <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
+
+# Key exchange algorithms: Avoid SHA1 and NIST curves.
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+
+# Server authentication.  The following keys are enabled by default, so this
+# is slightly redundant.
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+
+# Symmetric ciphers: Use only unbroken ciphers with decent block and key sizes
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+
+# Message authentication: No MD5, Encrypt-then-MAC with tag/key sizes of
+# 128bit or more.  We divert from the above recommendations by favoring 256
+# tag sizes over those with 512 bits.  The former should be more than enough.
+MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-256,hmac-sha2-512,hmac-ripemd160,umac-128@openssh.com
