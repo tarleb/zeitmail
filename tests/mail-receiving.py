@@ -9,7 +9,7 @@ from TestMessageGenerator import TestMessageGenerator
 
 def test_for_open_relay():
     """Verifies that the server isn't an open-relay"""
-    msggen = TestMessageGenerator(recipient="open-relay@testing.zeitmail.net")
+    msggen = TestMessageGenerator(recipient="open-relay@not-our-server.test")
     smtp = SMTPTester(message_generator=msggen)
     try:
         smtp.send()
@@ -26,7 +26,7 @@ def test_normal_mail_receiving():
     tester = SMTPTester(params)
     tester.send()
     tester.quit()
-    time.sleep(1)
+    time.sleep(2)
     assert(mailbox.contains_all(tester.messages))
 
 def test_receiving_via_starttls():

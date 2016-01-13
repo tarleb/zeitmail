@@ -6,8 +6,8 @@ import uuid
 class TestMessageGenerator:
     def __init__(
             self,
-            sender="sender@testing.zeitmail.org",
-            recipient="root@zeitmail.local",
+            sender="sender@testing.test",
+            recipient="root@mail.test",
             subject="zeitmail test"
         ):
         self.sender = sender
@@ -25,4 +25,4 @@ class TestMessageGenerator:
         return msg
 
     def generate_message_id(self):
-        return ("%s@testing.zeitmail.org" % uuid.uuid4())
+        return ("%s@testing.test" % uuid.uuid4())
