@@ -9,7 +9,7 @@ class SMTPParameters:
     def __init__(
             self,
             port=25,
-            host="zeitmail.local",
+            host="mail.test",
             enable_starttls=True,
             force_starttls=False
         ):
