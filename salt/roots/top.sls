@@ -3,3 +3,5 @@ base:
     - postfix
     - postfix.config
     - dovecot
+  'testing*':
+    - python3
