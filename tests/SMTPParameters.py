@@ -6,19 +6,13 @@ import ssl
 class SMTPParameters:
     """Parameters to be used in a SMTP connection."""
 
-    def __init__(
-            self,
-            port=25,
-            host="mail.test",
-            enable_starttls=True,
-            force_starttls=False
-        ):
+    def __init__(self):
         self.debug_level = 0
         self.local_hostname = None
-        self.port = port
-        self.host = host
-        self.enable_starttls = enable_starttls
-        self.force_starttls = force_starttls
+        self.port = 25
+        self.host = "mail.test"
+        self.enable_starttls = True
+        self.force_starttls = False
         self.authenticate = False
         self.user = "vagrant"
         self.password = "vagrant"

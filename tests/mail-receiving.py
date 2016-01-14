@@ -2,62 +2,55 @@
 
 import smtplib
 import time
+import unittest
 from SMTPTester import SMTPTester
 from SMTPParameters import SMTPParameters
 from TesterMailbox import TesterMailbox
 from TestMessageGenerator import TestMessageGenerator
 
-def test_for_open_relay():
-    """Verifies that the server isn't an open-relay"""
-    msggen = TestMessageGenerator(recipient="open-relay@not-our-server.test")
-    smtp = SMTPTester(message_generator=msggen)
-    try:
-        smtp.send()
-        tester.quit()
-        return False
-    except smtplib.SMTPRecipientsRefused:
-        return True
+class TestSMTP(unittest.TestCase):
+
+    def setUp(self):
+        self.mailbox = TesterMailbox()
+
+    def tearDown(self):
+        self.mailbox.close()
+
+    def assertMailboxContains(self, messages):
+        time.sleep(1)
+        self.assertTrue(self.mailbox.contains_all(messages))
     
-def test_normal_mail_receiving():
-    """Checks if normal, unencrypted mail delivery is possible"""
-    mailbox = TesterMailbox()
-    params = SMTPParameters()
-    params.enable_starttls = False
-    tester = SMTPTester(params)
-    tester.send()
-    tester.quit()
-    time.sleep(2)
-    assert(mailbox.contains_all(tester.messages))
+    def test_normal_mail_receiving(self):
+        """Checks if normal, unencrypted mail delivery is possible"""
+        params = SMTPParameters()
+        params.enable_starttls = False
+        with SMTPTester(params) as smtp:
+            smtp.send()
+            self.assertMailboxContains(smtp.messages)
 
-def test_receiving_via_starttls():
-    """Checks if the server can receive Mail via STARTTLS"""
-    mailbox = TesterMailbox()
-    params = SMTPParameters()
-    params.force_starttls = True
-    tester = SMTPTester(params)
-    tester.send()
-    tester.quit()
-    time.sleep(1)
-    assert(mailbox.contains_all(tester.messages))
+    def test_for_open_relay(self):
+        """Verifies that the server isn't an open-relay"""
+        msggen = TestMessageGenerator(recipient="open-relay@not-our-server.test")
+        with SMTPTester(message_generator=msggen) as smtp:
+            with self.assertRaises(smtplib.SMTPRecipientsRefused):
+                smtp.send()
 
-def test_submission_receiving():
-    """Tests that the server accepts mail via submission"""
-    mailbox = TesterMailbox()
-    params = SMTPParameters()
-    params.port = 587
-    params.authenticate = True
-    tester = SMTPTester(params)
-    tester.send()
-    tester.quit()
-    time.sleep(1)
-    assert(mailbox.contains_all(tester.messages))
+    def test_receiving_via_starttls(self):
+        """Checks if the server can receive Mail via STARTTLS"""
+        params = SMTPParameters()
+        params.force_starttls = True
+        with SMTPTester(params) as smtp:
+            smtp.send()
+            self.assertMailboxContains(smtp.messages)
 
-def main():
-    """Executes all tests for mail receiving."""
-    test_normal_mail_receiving()
-    test_for_open_relay()
-    test_receiving_via_starttls()
-    test_submission_receiving()
+    def test_submission_receiving(self):
+        """Tests that the server accepts mail via submission"""
+        params = SMTPParameters()
+        params.port = 587
+        params.authenticate = True
+        with SMTPTester(params) as smtp:
+            smtp.send()
+            self.assertMailboxContains(smtp.messages)
 
 if __name__ == '__main__':
-    main()
+    unittest.main()

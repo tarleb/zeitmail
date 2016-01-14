@@ -22,3 +22,6 @@ class TesterMailbox:
             if msg["Message-Id"] == needle_msg["Message-Id"]:
                 return True
         return False
+
+    def close(self):
+        self.mailbox.close()

@@ -13,6 +13,13 @@ class SMTPTester:
         self.params = params
         self.connection = params.create_connection()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.quit()
+        return False
+
     def send(self):
         msg = self.generate_message()
         self.ehlo()
