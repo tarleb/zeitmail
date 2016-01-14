@@ -52,5 +52,13 @@ class TestSMTP(unittest.TestCase):
             smtp.send()
             self.assertMailboxContains(smtp.messages)
 
+    def test_virtual_aliases(self):
+        """Test that virtual domain aliases are working"""
+        msggen = TestMessageGenerator(recipient="john@eggs.test")
+        params = SMTPParameters()
+        with SMTPTester(params, message_generator=msggen) as smtp:
+            smtp.send()
+            self.assertMailboxContains(smtp.messages)
+
 if __name__ == '__main__':
     unittest.main()
