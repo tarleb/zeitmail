@@ -21,3 +21,15 @@ newaliases:
     - cwd: /
     - watch:
       - file: /etc/aliases
+
+{% if pillar.get('virtual-mail', False) %}
+/etc/postfix/virtual:
+  file.managed:
+    - source: salt://postfix/files/virtual
+    - user: root
+    - group: root
+    - mode: 644
+    - template: jinja
+    - watch_in:
+      - service: postfix
+{% endif %}
