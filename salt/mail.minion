@@ -3,3 +3,7 @@
 id: mail.test
 file_client: local
 log_level: info
+
+grains:
+  testing:
+    load_test_data: True

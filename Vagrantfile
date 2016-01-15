@@ -7,8 +7,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   ## Disable default synced folder
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  ## Salt states
+  ## Salt states and pillar
   config.vm.synced_folder "salt/roots/", "/srv/salt/"
+  config.vm.synced_folder "salt/pillar/", "/srv/pillar/"
 
   ### Mail Server VM
   ### ==============
