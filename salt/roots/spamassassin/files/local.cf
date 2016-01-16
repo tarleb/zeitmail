@@ -1,0 +1,19 @@
+# This file is managed by Salt
+#
+# See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+# tweaked.
+#
+###########################################################################
+
+# Just add an X-Spam-Report header to suspected spam, rather than rewriting
+# the content of the e-mail
+report_safe 0
+
+# We want a detailed ham report header for debugging purposes
+add_header ham HAM-Report _REPORT_
+
+# Set the threshold at which a message is considered spam
+required_score 4.0
+
+# Don't use Bayesian classifier (for now)
+use_bayes 0
