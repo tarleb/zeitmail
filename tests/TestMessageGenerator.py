@@ -4,15 +4,18 @@ import email.message
 import uuid
 
 class TestMessageGenerator:
+
     def __init__(
             self,
             sender="sender@testing.test",
             recipient="root@mail.test",
-            subject="zeitmail test"
+            subject="zeitmail test",
+            gtube=False
         ):
         self.sender = sender
         self.recipient = recipient
         self.subject = subject
+        self.gtube = gtube
 
     def generate_message(self):
         """Creates a new message using the current settings."""
@@ -21,7 +24,10 @@ class TestMessageGenerator:
         msg["To"] = self.recipient
         msg["Subject"] = "zeitmail test"
         msg["Message-ID"] = "<%s>" % self.generate_message_id()
-        msg.set_content("Hello! This is a test message.")
+        if self.gtube:
+            msg.set_content("XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X")
+        else:
+            msg.set_content("Hello! This is a test message.")
         return msg
 
     def generate_message_id(self):

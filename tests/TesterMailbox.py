@@ -14,13 +14,13 @@ class TesterMailbox:
         f.truncate()
         f.close()
 
-    def contains_all(self, msgs):
-        return all(self.contains_message(msg) for msg in msgs)
+    def contains_all(self, msgs, **kwds):
+        return all(self.contains_message(msg, **kwds) for msg in msgs)
 
-    def contains_message(self, needle_msg):
+    def contains_message(self, needle_msg, additional_test=lambda msg: True):
         for msg in self.mailbox:
             if msg["Message-ID"] == needle_msg["Message-ID"]:
-                return True
+                return additional_test(msg)
         return False
 
     def close(self):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import email.message
 import smtplib
 import time
 import unittest
@@ -16,9 +17,9 @@ class TestSMTP(unittest.TestCase):
     def tearDown(self):
         self.mailbox.close()
 
-    def assertMailboxContains(self, messages):
+    def assertMailboxContains(self, *args, **kwds):
         time.sleep(1)
-        self.assertTrue(self.mailbox.contains_all(messages))
+        self.assertTrue(self.mailbox.contains_all(*args, **kwds))
 
     def test_normal_mail_receiving(self):
         """Checks if normal, unencrypted mail delivery is possible"""
@@ -79,6 +80,20 @@ class TestSMTP(unittest.TestCase):
         with SMTPTester(params, message_generator=msggen) as smtp:
             smtp.send()
             self.assertMailboxContains(smtp.messages)
+
+    def test_spamassassin_spam_recognition(self):
+        """Test that spamassassin correctly marks spam mails"""
+        def is_marked_as_spam(msg):
+            spamflag = msg["X-Spam-Flag"]
+            return spamflag == "YES"
+        msggen = TestMessageGenerator(gtube=True)
+        params = SMTPParameters()
+        with SMTPTester(params, message_generator=msggen) as smtp:
+            smtp.send()
+            self.assertMailboxContains(
+                smtp.messages,
+                additional_test=is_marked_as_spam
+            )
 
 if __name__ == '__main__':
     unittest.main()
