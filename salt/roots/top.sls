@@ -1,5 +1,6 @@
 base:
   'mail*':
+    - postgresql
     - postfix
     - postfix.config
     - dovecot

@@ -1,0 +1,2 @@
+postgresql:
+  pkg.installed: []
