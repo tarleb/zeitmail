@@ -4,5 +4,6 @@ base:
     - postfix
     - postfix.config
     - dovecot
+    - powerdns
   'testing*':
     - python3
