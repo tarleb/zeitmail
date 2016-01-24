@@ -1,0 +1,8 @@
+{%- from "powerdns/map.jinja" import powerdns with context -%}
+{%- set postgres = powerdns['postgres'] -%}
+#################################
+# PostgreSQL backend settings
+gpgsql-host={{postgres['host']}}
+gpgsql-dbname={{postgres['database']}}
+gpgsql-user={{postgres['user']}}
+gpgsql-password={{postgres['password']}}

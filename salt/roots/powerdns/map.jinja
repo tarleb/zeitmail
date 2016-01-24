@@ -1,0 +1,14 @@
+{% set powerdns = salt['pillar.get']('powerdns', {
+  'webserver': {
+    'password': '7ppCVjtEc3'
+  },
+  'postgres': {
+    'host': '127.0.0.1',
+    'user': 'powerdns',
+    'port': '5432',
+    'database': 'powerdns',
+    'password': 'VS9V6Orlin',
+    'schema_file': '/usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql'
+  },
+  'apikey': 'Uugaj9ie807GavvVUNFy62TG'
+}, merge=True) %}

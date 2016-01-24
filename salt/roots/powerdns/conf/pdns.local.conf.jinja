@@ -1,0 +1,34 @@
+{% from "powerdns/map.jinja" import powerdns with context %}
+#################################
+# webserver	Start a webserver for monitoring
+#
+webserver=yes
+
+#################################
+# webserver-address	IP Address of webserver to listen on
+#
+webserver-address=127.0.0.1
+
+#################################
+# webserver-allow-from	Webserver access is only allowed from these subnets
+#
+webserver-allow-from=127.0.0.1/8,::1/128
+
+#################################
+# webserver-password	Password required for accessing the webserver
+#
+webserver-password={{ powerdns.webserver.password }}
+
+#################################
+# webserver-port	Port of webserver to listen on
+#
+# webserver-port=8081
+
+#################################
+# webserver-print-arguments	If the webserver should print arguments
+#
+# webserver-print-arguments=no
+
+# API
+experimental-json-interface=yes
+experimental-api-key={{ powerdns.apikey }}
