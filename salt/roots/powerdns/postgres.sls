@@ -1,5 +1,6 @@
 {% from "powerdns/map.jinja" import powerdns with context %}
 {% set postgres = powerdns.postgres %}
+{% set psql_params = "-h 127.0.0.1 -U " ~ postgres.user ~ " -d " ~ postgres.database %}
 
 include:
   - powerdns
@@ -40,7 +41,7 @@ powerdns postgres dot pgpass:
 
 powerdns postgres relations:
   cmd.run:
-    - name: psql -U {{postgres.user}} -d {{postgres.database}} -f {{postgres.schema_file}} -h 127.0.0.1
+    - name: psql {{psql_params}} -f {{postgres.schema_file}}
     - require:
       - postgres_user: powerdns postgres user
       - postgres_database: powerdns postgres db
@@ -50,6 +51,16 @@ powerdns postgres relations:
   grains.present:
     - name: postgres:powerdns:initialized
     - value: True
+
+powerdns postgres test data:
+  file.managed:
+    - name: /home/vagrant/gpgsql-test-data.sql
+    - source: salt://{{slspath}}/data/test-data.sql
+  cmd.run:
+    - name: psql {{psql_params}} -f /home/vagrant/gpgsql-test-data.sql
+    - require:
+      - cmd: powerdns postgres relations
+      - file: powerdns postgres test data
 {% endif %}
 
 /etc/powerdns/pdns.d/pdns.local.conf:
