@@ -19,7 +19,7 @@ class TesterMailbox:
 
     def contains_message(self, needle_msg):
         for msg in self.mailbox:
-            if msg["Message-Id"] == needle_msg["Message-Id"]:
+            if msg["Message-ID"] == needle_msg["Message-ID"]:
                 return True
         return False
 

@@ -20,7 +20,7 @@ class TestMessageGenerator:
         msg["From"] = self.sender
         msg["To"] = self.recipient
         msg["Subject"] = "zeitmail test"
-        msg["Message-Id"] = self.generate_message_id()
+        msg["Message-ID"] = "<%s>" % self.generate_message_id()
         msg.set_content("Hello! This is a test message.")
         return msg
 
