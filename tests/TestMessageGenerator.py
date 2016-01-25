@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import datetime
 import email.message
 import uuid
 
@@ -23,6 +24,7 @@ class TestMessageGenerator:
         msg["From"] = self.sender
         msg["To"] = self.recipient
         msg["Subject"] = "zeitmail test"
+        msg["Date"] = datetime.datetime.utcnow()
         msg["Message-ID"] = "<%s>" % self.generate_message_id()
         if self.gtube:
             msg.set_content("XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X")
