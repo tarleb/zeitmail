@@ -1,3 +1,4 @@
-{%- for alias, target in salt['pillar.get']('virtual-mail:aliases', {}).iteritems() -%}
+{%- set aliases = salt['pillar.get']('mail:virtual:aliases', {}) -%}
+{%- for alias, target in aliases.iteritems() -%}
 {{alias}}	{{target}}
 {%- endfor -%}

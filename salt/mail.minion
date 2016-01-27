@@ -6,4 +6,4 @@ log_level: info
 
 grains:
   testing:
-    load_test_data: True
+    load_data: True

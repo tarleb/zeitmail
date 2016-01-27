@@ -20,7 +20,7 @@ smtpd_sasl_type = dovecot
 smtpd_sasl_path = private/auth
 
 ## Aliases
-virtual_alias_domains = {{ salt['pillar.get']('virtual-mail:domains', [])|join(', ') }}
+virtual_alias_domains = {{ salt['pillar.get']('mail:virtual:domains', [])|join(', ') }}
 virtual_alias_maps = texthash:/etc/postfix/virtual
 
 ## User mailboxes

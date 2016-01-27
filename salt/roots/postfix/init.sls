@@ -22,7 +22,7 @@ newaliases:
     - watch:
       - file: /etc/aliases
 
-{% if pillar.get('virtual-mail', False) %}
+{% if pillar.get('mail:virtual', False) %}
 /etc/postfix/virtual:
   file.managed:
     - source: salt://postfix/files/virtual

@@ -1,0 +1,4 @@
+mail:
+  virtual:
+    domains: []
+    aliases: {}
