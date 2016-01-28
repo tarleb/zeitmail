@@ -34,6 +34,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
+  ### Staging VM
+  ### ==========
+  config.vm.define "staging" do |staging|
+    staging.vm.network "private_network", ip: "192.168.23.128"
+    staging.vm.hostname = "staging.test"
+    # This is used for testing with salt-ssh, so no mounting of salt folders
+    staging.vm.synced_folder "salt/roots/", "/srv/salt/", disabled: true
+    staging.vm.synced_folder "salt/pillar/", "/srv/pillar/", disabled: true
+  end
+
   ### Test VM
   ### =======
   config.vm.define "testing" do |testing|
