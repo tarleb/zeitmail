@@ -1,0 +1,9 @@
+staging:
+  host: 192.168.23.128
+  user: vagrant
+  passwd: vagrant
+  sudo: True
+  minion_opts:
+    grains:
+      testing:
+        load_data: False
