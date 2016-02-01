@@ -5,5 +5,13 @@ staging:
   sudo: True
   minion_opts:
     grains:
+      # The system user to which important system mails are forwarded.  This
+      # includes mail to RFC 2142 addresses (info, abuse, trouble, noc,
+      # security, postmaster, and hostmaster) as well as admin, root, and
+      # nobody.
+      admin-user: vagrant
+
+      # Settings intended for testing only.  DO NOT enable this on a live
+      # system.
       testing:
         load_data: False
