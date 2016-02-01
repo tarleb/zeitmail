@@ -42,5 +42,10 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 # Spam control
 smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
 
+## Mail User Agent restrictions (used in master.cf)
+mua_sender_restrictions =
+mua_client_restrictions =
+mua_helo_restrictions =
+
 # Misc
 readme_directory = no
