@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 
 import smtplib
 import time
@@ -19,7 +19,7 @@ class TestSMTP(unittest.TestCase):
     def assertMailboxContains(self, messages):
         time.sleep(1)
         self.assertTrue(self.mailbox.contains_all(messages))
-    
+
     def test_normal_mail_receiving(self):
         """Checks if normal, unencrypted mail delivery is possible"""
         params = SMTPParameters()
@@ -43,6 +43,14 @@ class TestSMTP(unittest.TestCase):
             smtp.send()
             self.assertMailboxContains(smtp.messages)
 
+    def test_auth_not_possible_on_port_25(self):
+        """Tests that the AUTH feature is not provided for normal SMTP"""
+        params = SMTPParameters()
+        with SMTPTester(params) as smtp:
+            smtp.ehlo()
+            smtp.starttls()
+            self.assertFalse(smtp.authenticate())
+
     def test_submission_receiving(self):
         """Tests that the server accepts mail via submission"""
         params = SMTPParameters()
@@ -51,6 +59,18 @@ class TestSMTP(unittest.TestCase):
         with SMTPTester(params) as smtp:
             smtp.send()
             self.assertMailboxContains(smtp.messages)
+
+    def test_submission_auth_requires_tls(self):
+        """Tests that the AUTH feature is not provided for normal SMTP"""
+        params = SMTPParameters()
+        params.port = 587
+        with SMTPTester(params) as smtp:
+            smtp.ehlo()
+            smtp.starttls()
+            self.assertTrue(smtp.authenticate())
+        with SMTPTester(params) as smtp:
+            smtp.ehlo()
+            self.assertFalse(smtp.authenticate())
 
     def test_virtual_aliases(self):
         """Test that virtual domain aliases are working"""

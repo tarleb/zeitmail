@@ -45,10 +45,11 @@ class SMTPTester:
         user = self.params.user
         password = self.params.password
         self.connection.login(user, password)
+        return True
 
     def use_starttls(self):
         return (
-            (self.params.enable_starttls 
+            (self.params.enable_starttls
              and self.connection.has_extn("STARTTLS"))
             or self.params.force_starttls
         )
