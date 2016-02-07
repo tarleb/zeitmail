@@ -22,7 +22,6 @@ newaliases:
     - watch:
       - file: /etc/aliases
 
-{% if pillar.get('mail:virtual', False) %}
 /etc/postfix/virtual:
   file.managed:
     - source: salt://postfix/files/virtual
@@ -30,6 +29,9 @@ newaliases:
     - group: root
     - mode: 644
     - template: jinja
-    - watch_in:
-      - service: postfix
-{% endif %}
+
+postmap /etc/postfix/virtual:
+  cmd.wait:
+    - cwd: /
+    - watch:
+      - file: /etc/postfix/virtual

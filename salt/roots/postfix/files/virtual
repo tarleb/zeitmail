@@ -1,4 +1,10 @@
-{%- set aliases = salt['pillar.get']('mail:virtual:aliases', {}) -%}
-{%- for alias, target in aliases.iteritems() -%}
+# Aliases
+{% set aliases = salt['pillar.get']('mail:virtual:aliases', {}) -%}
+{% for alias, target in aliases.iteritems() -%}
 {{alias}}	{{target}}
-{%- endfor -%}
+{% endfor %}
+# Domains
+{% set domains = salt['pillar.get']('mail:virtual:domains', {}) -%}
+{% for dom in domains -%}
+{{dom}}	this-is-ignored
+{% endfor %}
