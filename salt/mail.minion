@@ -7,3 +7,6 @@ log_level: info
 grains:
   testing:
     load_data: True
+    spamassassin:
+      local_only: True
+      simulate_untrusted_network: True

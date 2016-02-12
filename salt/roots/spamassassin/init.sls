@@ -12,5 +12,6 @@ spamassassin-client:
 /etc/spamassassin/local.cf:
   file.managed:
     - source: salt://spamassassin/files/local.cf
+    - template: jinja
     - watch_in:
       - service: spamassassin
