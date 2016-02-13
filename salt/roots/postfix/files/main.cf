@@ -41,6 +41,13 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 # Spam control
 smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
 
+## Require that a reply could be sent to the envelope senders
+strict_rfc821_envelopes = yes
+## Don't make address validation simpler than it should be
+disable_vrfy_command = yes
+## Really bad spambots skip the HELO, so we require it.
+smtpd_helo_required = yes
+
 ## Mail User Agent restrictions (used in master.cf)
 mua_sender_restrictions =
 mua_client_restrictions =
