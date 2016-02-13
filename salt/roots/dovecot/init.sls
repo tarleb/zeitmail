@@ -1,11 +1,15 @@
 dovecot-core:
   pkg.installed: []
 
+dovecot-imapd:
+  pkg.installed
+
 dovecot:
   service.running:
     - enable: True
     - require:
       - pkg: dovecot-core
+      - pkg: dovecot-imapd
 
 /etc/dovecot/conf.d/10-master.conf:
   file.managed:
