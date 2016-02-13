@@ -10,7 +10,7 @@
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
 smtp      inet  n       -       -       -       -       smtpd
-  -o content_filter=spamassassin
+  -o content_filter=amavisfeed:[::1]:10024
 #smtp      inet  n       -       -       -       1       postscreen
 #smtpd     pass  -       -       -       -       -       smtpd
 #dnsblog   unix  -       -       -       -       0       dnsblog
@@ -98,3 +98,30 @@ mailman   unix  -       n       n       -       -       pipe
 # Spamassassin after-queue
 spamassassin unix -     n       n       -       -       pipe
   user=debian-spamd argv=/usr/bin/spamc -f -e /usr/sbin/sendmail -oi -f ${sender} ${recipient}
+# Amavis after-queue
+amavisfeed	unix	-	-	n	-	2	lmtp
+  -o lmtp_data_done_timeout=1200
+  -o lmtp_send_xforward_command=yes
+  -o lmtp_tls_note_starttls_offer=no
+# Reinject mail from mail filter
+[::1]:10025	inet	n	-	n	-	-	smtpd
+  -o content_filter=
+  -o smtpd_delay_reject=no
+  -o smtpd_client_restrictions=permit_mynetworks,reject
+  -o smtpd_helo_restrictions=
+  -o smtpd_sender_restrictions=
+  -o smtpd_recipient_restrictions=permit_mynetworks,reject
+  -o smtpd_data_restrictions=reject_unauth_pipelining
+  -o smtpd_end_of_data_restrictions=
+  -o smtpd_restriction_classes=
+  -o mynetworks=[::1]/128
+  -o smtpd_error_sleep_time=0
+  -o smtpd_soft_error_limit=1001
+  -o smtpd_hard_error_limit=1000
+  -o smtpd_client_connection_count_limit=0
+  -o smtpd_client_connection_rate_limit=0
+  -o receive_override_options=no_header_body_checks,no_unknown_recipient_checks,no_milters
+  -o local_header_rewrite_clients=
+  -o smtpd_milters=
+  -o local_recipient_maps=
+  -o relay_recipient_maps=

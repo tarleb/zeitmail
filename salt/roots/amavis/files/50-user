@@ -1,13 +1,49 @@
 use strict;
 
 #
-# Place your configuration directives here.  They will override those in
-# earlier files.
-#
-# See /usr/share/doc/amavisd-new/ for documentation and examples of
-# the directives you can use in this file
+# SPAM checking
 #
 
+@bypass_spam_checks_maps = (
+   \%bypass_spam_checks, \@bypass_spam_checks_acl, \$bypass_spam_checks_re);
+
+
+#
+# Overwrite settings which differ from Debian defaults.
+#
+$syslog_priority = 'info';
+$sa_spam_subject_tag = '';
+
+$final_virus_destiny      = D_DISCARD;  # (data not lost, see virus quarantine)
+$final_banned_destiny     = D_REJECT;   # D_REJECT when front-end MTA
+$final_spam_destiny       = D_PASS;     # Just mark as spam, don't do anything
+$final_bad_header_destiny = D_PASS;     # False-positive prone (for spam)
+
+# Always add spam info headers
+$sa_tag_level_deflt = -9999;
+$sa_tag2_level_deflt = 5.8;
+$sa_kill_level_deflt = 5.8;
+$sa_dsn_cutoff_level = 9999;            # spam level beyond which a DSN is not sent
+
+# MTA INTERFACE
+$inet_socket_bind = ['[::1]'];          # Only listen on IPv6
+$notify_method  = 'smtp:[::1]:10025';
+$forward_method = 'smtp:[::1]:10025';
+
+{% if salt['grains.get']('testing:spamassassin', False) -%}
+### BEGIN TEST SETTINGS ###
+#
+# This section should always be the last in this file.  It is used to
+# overwrite any normal settings, ensuring repeatable tests in testing
+# environments.  This section should not be present in a production
+# environment.
+#
+{% if salt['grains.get']('testing:spamassassin:simulate_untrusted_network', False) -%}
+@mynetworks = qw( 127.0.0.0/8 [::1] 169.254.0.0/16 [fe80::]/10
+                  192.168.23.2/32 [fc00::]/7 );
+{%- endif %}
+### END TEST SETTINGS ###
+{%- endif %}
 
 #------------ Do not modify anything below this line -------------
 # Local Variables:
