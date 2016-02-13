@@ -14,6 +14,6 @@ indent_size = 2
 [*.sls]
 indent_size = 2
 
-[*.conf]
+[*.c{,on}f]
 indent_size = 8
 indent_style = tab

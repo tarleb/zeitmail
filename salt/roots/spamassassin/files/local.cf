@@ -1,0 +1,41 @@
+# This file is managed by Salt
+#
+# See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+# tweaked.
+#
+###########################################################################
+
+# Just add an X-Spam-Report header to suspected spam, rather than rewriting
+# the content of the e-mail
+report_safe 0
+
+# We want a detailed ham report header for debugging purposes
+add_header ham HAM-Report _REPORT_
+
+# Set the threshold at which a message is considered spam
+required_score 4.0
+
+# Don't use Bayesian classifier (for now)
+use_bayes 0
+
+{% if salt['grains.get']('testing:spamassassin', False) -%}
+### BEGIN TEST SETTINGS ###
+#
+# This section should always be the last in this file.  It is used to
+# overwrite any normal settings, ensuring repeatable tests in testing
+# environments.  This section should not be present in a production
+# environment.
+#
+
+{% if salt['grains.get']('testing:spamassassin:simulate_untrusted_network', False) -%}
+add_header all RelaysUntrusted _RELAYSUNTRUSTED_
+clear_trusted_networks
+trusted_networks 192.168.23.2 127.0.0.1
+{%- endif %}
+
+{% if salt['grains.get']('testing:spamassassin:local_only', False) -%}
+# Disable DNS-blocklist checks
+skip_rbl_checks 1
+{%- endif %}
+### END TEST SETTINGS ###
+{%- endif %}
