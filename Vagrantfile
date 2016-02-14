@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     ## Mail forward
     mail.vm.provision :shell,
-      inline: "echo /home/vagrant/mail/test.mbox > /home/vagrant/.forward"
+      inline: "echo \\\\vagrant,/home/vagrant/mail/test.mbox > /home/vagrant/.forward"
 
     # Provision with Salt
     mail.vm.provision :salt do |salt|
