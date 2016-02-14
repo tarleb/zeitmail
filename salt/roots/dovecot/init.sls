@@ -12,10 +12,10 @@ dovecot:
       - pkg: dovecot-imapd
 
 {# Config Files #}
-{% for file in ['10-master.conf', '10-ssl.conf'] %}
-/etc/dovecot/conf.d/{{file}}:
+{% for file in ['10-master', '10-ssl', '15-mailboxes'] %}
+/etc/dovecot/conf.d/{{file}}.conf:
   file.managed:
-    - source: salt://dovecot/files/{{file}}
+    - source: salt://dovecot/files/{{file}}.conf
     - user: root
     - group: root
     - mode: 644
