@@ -7,6 +7,7 @@ base:
     - postfix.config
     - dovecot
     - nginx
+    - roundcube
   'staging*':
     - apt
     - spamassassin
@@ -15,5 +16,6 @@ base:
     - postfix.config
     - dovecot
     - nginx
+    - roundcube
   'testing*':
     - python3
