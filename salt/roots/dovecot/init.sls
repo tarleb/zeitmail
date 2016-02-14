@@ -2,14 +2,20 @@ dovecot-core:
   pkg.installed: []
 
 dovecot-imapd:
-  pkg.installed
+  pkg.installed:
+    - require_in:
+      - service: dovecot
+
+dovecot-sieve:
+  pkg.installed:
+    - require_in:
+      - service: dovecot
 
 dovecot:
   service.running:
     - enable: True
     - require:
       - pkg: dovecot-core
-      - pkg: dovecot-imapd
 
 {# Config Files #}
 {% for file in ['10-master', '10-ssl', '15-mailboxes'] %}
