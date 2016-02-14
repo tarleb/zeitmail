@@ -11,9 +11,11 @@ dovecot:
       - pkg: dovecot-core
       - pkg: dovecot-imapd
 
-/etc/dovecot/conf.d/10-master.conf:
+{# Config Files #}
+{% for file in ['10-master.conf', '10-ssl.conf'] %}
+/etc/dovecot/conf.d/{{file}}:
   file.managed:
-    - source: salt://dovecot/files/10-master.conf
+    - source: salt://dovecot/files/{{file}}
     - user: root
     - group: root
     - mode: 644
@@ -21,3 +23,4 @@ dovecot:
       - pkg: dovecot-core
     - watch_in:
       - service: dovecot
+{% endfor %}
