@@ -1,5 +1,6 @@
 base:
   'mail*':
+    - apt
     - spamassassin
     - amavis
     - postfix
@@ -7,6 +8,7 @@ base:
     - dovecot
     - nginx
   'staging*':
+    - apt
     - spamassassin
     - amavis
     - postfix
