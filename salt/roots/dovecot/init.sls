@@ -1,15 +1,27 @@
 dovecot-core:
   pkg.installed: []
 
+dovecot-imapd:
+  pkg.installed:
+    - require_in:
+      - service: dovecot
+
+dovecot-sieve:
+  pkg.installed:
+    - require_in:
+      - service: dovecot
+
 dovecot:
   service.running:
     - enable: True
     - require:
       - pkg: dovecot-core
 
-/etc/dovecot/conf.d/10-master.conf:
+{# Config Files #}
+{% for file in ['10-master', '10-mail', '10-ssl', '15-lda', '15-mailboxes', '90-sieve'] %}
+/etc/dovecot/conf.d/{{file}}.conf:
   file.managed:
-    - source: salt://dovecot/files/10-master.conf
+    - source: salt://dovecot/files/{{file}}.conf
     - user: root
     - group: root
     - mode: 644
@@ -17,3 +29,4 @@ dovecot:
       - pkg: dovecot-core
     - watch_in:
       - service: dovecot
+{% endfor %}
