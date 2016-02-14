@@ -18,7 +18,7 @@ dovecot:
       - pkg: dovecot-core
 
 {# Config Files #}
-{% for file in ['10-master', '10-mail', '10-ssl', '15-lda', '15-mailboxes'] %}
+{% for file in ['10-master', '10-mail', '10-ssl', '15-lda', '15-mailboxes', '90-sieve'] %}
 /etc/dovecot/conf.d/{{file}}.conf:
   file.managed:
     - source: salt://dovecot/files/{{file}}.conf
