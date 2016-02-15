@@ -13,6 +13,16 @@ roundcube:
       - file: /etc/apt/preferences.d/roundcube.pref
       - pkg: php
 
+/etc/roundcube/config.inc.php:
+  file.managed:
+    - source: salt://{{slspath}}/files/config.inc.php
+    - template: jinja
+    - user: root
+    - group: www-data
+    - mode: 640
+    - require:
+      - pkg: roundcube
+
 roundcube nginx site:
   file.managed:
     - name: /etc/nginx/sites-available/mail.{{fqdn}}.conf
