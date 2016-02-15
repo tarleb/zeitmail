@@ -6,7 +6,6 @@ base:
     - postfix
     - postfix.config
     - dovecot
-    - nginx
     - roundcube
   'staging*':
     - apt
@@ -15,7 +14,6 @@ base:
     - postfix
     - postfix.config
     - dovecot
-    - nginx
     - roundcube
   'testing*':
     - python3
