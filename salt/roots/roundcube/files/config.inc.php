@@ -89,8 +89,7 @@ $config['product_name'] = 'ZeITMail Roundcube Webmail';
 // this key is used to encrypt the users imap password which is stored
 // in the session record (and the client cookie if remember password is enabled).
 // please provide a string of exactly 24 chars.
-// YOUR KEY MUST BE DIFFERENT THAN THE SAMPLE VALUE FOR SECURITY REASONS
-$config['des_key'] = 'rcmail-!24ByteDESkey*Str';
+include_once("/etc/roundcube/config-des-key.inc.php");
 
 // List of active plugins (in plugins/ directory)
 $config['plugins'] = array(
