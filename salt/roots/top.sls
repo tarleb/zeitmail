@@ -10,6 +10,7 @@ base:
     - postfix.config
     - dovecot
     - roundcube
+    - letsencrypt
   'staging*':
     - apt
     - opendkim
@@ -21,5 +22,6 @@ base:
     - postfix.config
     - dovecot
     - roundcube
+    - letsencrypt
   'testing*':
     - python3
