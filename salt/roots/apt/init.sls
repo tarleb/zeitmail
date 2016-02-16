@@ -19,6 +19,10 @@
         Pin: release n=jessie-backports
         Pin-Priority: 700
 
+        Package: *
+        Pin: release n=stretch
+        Pin-Priority: 600
+
 jessie:
   pkgrepo.managed:
     - name: deb http://httpredir.debian.org/debian/ jessie main
@@ -35,7 +39,14 @@ jessie-updates:
 
 jessie-backports:
   pkgrepo.managed:
-    - name: deb http://httpredir.debian.org/debian jessie-backports main
+    - name: deb http://httpredir.debian.org/debian/ jessie-backports main
     - file: /etc/apt/sources.list.d/jessie-backports.list
+    - comps: 'main'
+    - refresh_db: False
+
+stretch:
+  pkgrepo.managed:
+    - name: deb http://httpredir.debian.org/debian/ stretch main
+    - file: /etc/apt/sources.list.d/stretch.list
     - comps: 'main'
     - refresh_db: False
