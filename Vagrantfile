@@ -15,7 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ### ==============
   config.vm.define "mail", primary: true do |mail|
     mail.vm.network "private_network", ip: "192.168.23.2"
-    mail.vm.hostname = "mail.test"
+    mail.vm.hostname = "mail.zeitmail.test"
 
     ## Mail files (mbox)
     mail.vm.synced_folder "tests/mail-mnt/", "/home/vagrant/mail",
@@ -38,7 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ### ==========
   config.vm.define "staging" do |staging|
     staging.vm.network "private_network", ip: "192.168.23.128"
-    staging.vm.hostname = "staging.test"
+    staging.vm.hostname = "staging.zeitmail.test"
     # This is used for testing with salt-ssh, so no mounting of salt folders
     staging.vm.synced_folder "salt/roots/", "/srv/salt/", disabled: true
     staging.vm.synced_folder "salt/pillar/", "/srv/pillar/", disabled: true
@@ -48,7 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ### =======
   config.vm.define "testing" do |testing|
     testing.vm.network "private_network", ip: "192.168.42.2"
-    testing.vm.hostname = "testing.test"
+    testing.vm.hostname = "testing.zeitmail.test"
 
     # Tests
     testing.vm.synced_folder "tests/", "/home/vagrant/tests",
@@ -57,7 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       mount_options: ["dmode=770,fmode=660"]
 
     # Let the machine know where the test mail server is.
-    testing.vm.provision :shell, inline: "echo 192.168.23.2 mail.test >> /etc/hosts"
+    testing.vm.provision :shell, inline: "echo 192.168.23.2 zeitmail.test mail.zeitmail.test >> /etc/hosts"
 
     # Provision with Salt
     testing.vm.provision :salt do |salt|

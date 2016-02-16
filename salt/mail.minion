@@ -1,6 +1,6 @@
 # -*- mode: yaml -*-
 
-id: mail.test
+id: mail.zeitmail.test
 file_client: local
 log_level: info
 

@@ -2,8 +2,8 @@
 
 # Domains
 myhostname = {{grains['fqdn']}}
-myorigin = /etc/mailname
-mydestination = {{grains['fqdn']}}, localhost.local, localhost
+myorigin = {{grains['domain']}}
+mydestination = {{grains['fqdn']}}, {{grains['domain']}}, localhost.local, localhost
 relayhost =
 
 # Networking

@@ -9,7 +9,7 @@ class TestMessageGenerator:
     def __init__(
             self,
             sender="sender@testing.test",
-            recipient="root@mail.test",
+            recipient="root@zeitmail.test",
             subject="zeitmail test",
             gtube=False,
             fakeReceived=False
@@ -25,7 +25,7 @@ class TestMessageGenerator:
         msg = email.message.EmailMessage()
         if self.fakeReceived:
             rcvd = "from funny.test (elite-mail.test [10.0.13.37]) by \
-              testing.test (Postfix) with ESMTPS for root@mail.test; \
+              testing.test (Postfix) with ESMTPS for root@zeitmail.test; \
               Tue, 26 Jan 2016 09:36:49 +0000 (GMT)"
             msg.add_header("Received", rcvd)
         msg["From"] = self.sender
