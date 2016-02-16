@@ -1,4 +1,4 @@
-{%- set fqdn = salt['grains.get']('domain', 'mail.test') -%}
+{%- set domain = salt['grains.get']('domain', 'zeitmail.test') -%}
 include:
   - php
   - nginx
@@ -47,7 +47,7 @@ roundcube:
 
 roundcube nginx site:
   file.managed:
-    - name: /etc/nginx/sites-available/mail.{{fqdn}}.conf
+    - name: /etc/nginx/sites-available/mail.{{domain}}.conf
     - source: salt://{{slspath}}/files/nginx-mail-site.conf
     - template: jinja
     - user: root
@@ -58,8 +58,8 @@ roundcube nginx site:
 
 enable roundcube site:
   file.symlink:
-    - name: /etc/nginx/sites-enabled/mail.{{fqdn}}.conf
-    - target: /etc/nginx/sites-available/mail.{{fqdn}}.conf
+    - name: /etc/nginx/sites-enabled/mail.{{domain}}.conf
+    - target: /etc/nginx/sites-available/mail.{{domain}}.conf
     - require:
       - file: roundcube nginx site
     - watch_in:
