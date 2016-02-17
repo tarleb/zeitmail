@@ -5,7 +5,12 @@
     - mode: 644
     - contents: "# See /etc/apt/sources.list.d/ for configured sources"
 
-/etc/apt/preferences:
+# Save old preferences file as fallback in preferences.d.
+/etc/apt/preferences.d/98-old-preferences.pref:
+  file.rename:
+    - source: /etc/apt/preferences
+
+/etc/apt/preferences.d/99-defaults.pref:
   file.managed:
     - user: root
     - group: root

@@ -1,4 +1,4 @@
-/etc/apt/preferences.d/roundcube.pref:
+/etc/apt/preferences.d/10-roundcube.pref:
   file.managed:
     - user: root
     - group: root
@@ -6,4 +6,4 @@
     - contents: |
         Package: roundcube*
         Pin: release n=jessie-backports
-        Pin-Priority: 950
+        Pin-Priority: 850
