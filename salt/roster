@@ -16,6 +16,11 @@ staging:
       dkim:
         sign: True
 
+      # Let's Encrypt
+      letsencrypt:
+        # Whether to use the ACME protocol via webroot to get/renew certs.
+        use_webroot: True
+
       # Settings intended for testing only.  DO NOT enable this on a live
       # system.
       testing:
