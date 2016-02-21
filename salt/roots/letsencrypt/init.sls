@@ -61,3 +61,11 @@ get letsencrypt certificate:
     - group: root
     - mode: 644
     - makedirs: True
+
+/etc/letsencrypt/renew-webroot.sh:
+  file.managed:
+    - source: salt://{{slspath}}/files/renew-webroot.sh
+    - user: root
+    - group: root
+    - mode: 600
+    - makedirs: True
