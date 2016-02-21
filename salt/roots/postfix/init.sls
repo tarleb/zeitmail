@@ -1,3 +1,6 @@
+include:
+  - opendkim
+
 postfix:
   pkg.installed: []
   service.running:
@@ -5,6 +8,7 @@ postfix:
     - reload: True
     - require:
       - pkg: postfix
+      - service: opendkim
 
 /etc/aliases:
   file.managed:

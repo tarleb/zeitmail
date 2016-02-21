@@ -27,6 +27,7 @@ include:
     - user: root
     - group: root
     - mode: 644
+    - template: jinja
     - require:
       - pkg: postfix
     - watch_in:
