@@ -1,3 +1,11 @@
+{%- set domain = salt['grains.get']('domain') %}
+{%- set email = salt['grains.get'](
+        'letsencrypt:email',
+        'postmaster@' ~ domain) -%}
+{%- set subdomains = [domain, 'mail.' ~ domain, 'www.' ~ 'domain'] -%}
+{%- set domain_config_file = '/etc/letsencrypt/config-{{domain}}.ini' -%}
+{%- set agree_tos = salt['grains.get']('letsencrypt:agree_tos', False) -%}
+
 include:
   - apt
 
@@ -17,3 +25,39 @@ letsencrypt:
   pkg.installed:
     - require:
       - file: /etc/apt/preferences.d/10-python-cryptography.pref
+
+letsencrypt config:
+  file.managed:
+    - name: {{domain_config_file}}
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
+    - contents: |
+        webroot
+        webroot-path = /var/www/letsencrypt
+        domains = {{subdomains|join(',')}}
+        rsa-key-size = 4096
+
+get letsencrypt certificate:
+  cmd.run:
+    - name: >
+        letsencrypt certonly
+        -a webroot
+        --config {{domain_config_file}}
+        --non-interactive
+        --dry-run
+        --email {{email}}
+        {{'--agree-tos' if agree_tos else '' }}
+    - creates: /etc/letsencrypt/live/{{domain}}/fullchain.pem
+    - require:
+      - file: letsencrypt config
+      - file: /var/www/letsencrypt
+
+/var/www/letsencrypt:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 644
+    - makedirs: True
