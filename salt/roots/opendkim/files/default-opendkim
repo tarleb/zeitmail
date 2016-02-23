@@ -1,0 +1,8 @@
+## NOTE: This file is managed by salt.  Changes will be overwritten.
+
+# Command-line options specified here will override the contents of
+# /etc/opendkim.conf. See opendkim(8) for a complete list of options.
+#DAEMON_OPTS=""
+
+# Use IPv6 socket instead of the default UNIX socket.
+SOCKET="inet6:10026@[::1]"

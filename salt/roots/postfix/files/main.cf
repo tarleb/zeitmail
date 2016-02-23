@@ -53,5 +53,15 @@ mua_sender_restrictions =
 mua_client_restrictions =
 mua_helo_restrictions =
 
+##
+## Milters
+##
+milter_default_action = accept
+smtpd_milters = inet:localhost:10026
+non_smtp_milters =
+	{% if salt['grains.get']('dkim:sign') -%}
+	inet:localhost:10026
+	{%- endif %}
+
 # Misc
 readme_directory = no

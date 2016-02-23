@@ -25,6 +25,7 @@ submission inet n       -       -       -       -       smtpd
   -o smtpd_sender_restrictions=$mua_sender_restrictions
   -o smtpd_recipient_restrictions=
   -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
+  -o smtpd_milter={{ 'inet:localhost:10026' if salt['grains.get']('dkim:sign') else '' }}
 #smtps     inet  n       -       -       -       -       smtpd
 #  -o syslog_name=postfix/smtps
 #  -o smtpd_tls_wrappermode=yes

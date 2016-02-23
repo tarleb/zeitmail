@@ -11,6 +11,11 @@ staging:
       # nobody.
       admin-user: vagrant
 
+      # Domain Key Identified Mail signing requires additional TXT records in
+      # DNS.  This is not always possible with some hosts.
+      dkim:
+        sign: True
+
       # Settings intended for testing only.  DO NOT enable this on a live
       # system.
       testing:

@@ -1,6 +1,7 @@
 base:
   'mail*':
     - apt
+    - opendkim
     - spamassassin
     - amavis
     - postfix
@@ -9,6 +10,7 @@ base:
     - roundcube
   'staging*':
     - apt
+    - opendkim
     - spamassassin
     - amavis
     - postfix
