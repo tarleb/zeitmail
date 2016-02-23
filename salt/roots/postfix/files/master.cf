@@ -126,3 +126,5 @@ amavisfeed	unix	-	-	n	-	2	lmtp
   -o smtpd_milters=
   -o local_recipient_maps=
   -o relay_recipient_maps=
+policy-spf	unix	-	n	n	-	-	spawn
+	user=nobody argv=/usr/bin/policyd-spf

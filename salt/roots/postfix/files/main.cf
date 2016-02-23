@@ -40,6 +40,7 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 
 # Spam control
 smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+smtpd_recipient_restrictions = check_policy_service unix:private/policy-spf
 
 ## Require that a reply could be sent to the envelope senders
 strict_rfc821_envelopes = yes
@@ -52,6 +53,9 @@ smtpd_helo_required = yes
 mua_sender_restrictions =
 mua_client_restrictions =
 mua_helo_restrictions =
+
+## SPF policy daemon
+policy-spf_time_limit = 3600s
 
 ##
 ## Milters
