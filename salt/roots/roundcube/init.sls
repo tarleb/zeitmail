@@ -1,5 +1,6 @@
 {%- set domain = salt['grains.get']('domain', 'zeitmail.test') -%}
 include:
+  - postgresql
   - php
   - nginx
   - .apt-preferences
@@ -12,6 +13,7 @@ roundcube:
     - require:
       - file: /etc/apt/preferences.d/roundcube.pref
       - pkg: php
+      - service: postgresql
 
 # The des_key config file is generated in a two-step process.  First the file
 # is generated, readable by nobody but root.  Then the proper permissions are
