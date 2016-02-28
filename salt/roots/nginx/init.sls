@@ -14,6 +14,15 @@ nginx:
       - pkg: nginx
       - cmd: get letsencrypt certificate
 
+/etc/nginx/nginx.conf:
+  file.managed:
+    - source: salt://{{slspath}}/files/nginx.conf
+    - user: root
+    - group: root
+    - mode: 644
+    - watch_in:
+      - service: nginx
+
 # Backup site config files.  May be overwritten later.
 {% for domain in domains %}
 /etc/nginx/sites-available/{{domain}}.conf:
