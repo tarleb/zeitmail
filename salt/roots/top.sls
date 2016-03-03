@@ -6,6 +6,7 @@ base:
     - amavis
     - postfix
     - postfix.config
+    - postfix-policyd-spf
     - dovecot
     - roundcube
   'staging*':
@@ -15,6 +16,7 @@ base:
     - amavis
     - postfix
     - postfix.config
+    - postfix-policyd-spf
     - dovecot
     - roundcube
   'testing*':
