@@ -61,7 +61,8 @@ policy-spf_time_limit = 3600s
 ## Milters
 ##
 milter_default_action = accept
-smtpd_milters = inet:localhost:10026
+# OpenDKIM, OpenDMARC
+smtpd_milters = inet:localhost:10026, inet:localhost:10028
 non_smtp_milters =
 	{% if salt['grains.get']('dkim:sign') -%}
 	inet:localhost:10026

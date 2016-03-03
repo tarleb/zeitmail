@@ -2,21 +2,23 @@ base:
   'mail*':
     - apt
     - opendkim
+    - opendmarc
     - spamassassin
     - amavis
+    - postfix-policyd-spf
     - postfix
     - postfix.config
-    - postfix-policyd-spf
     - dovecot
     - roundcube
   'staging*':
     - apt
     - opendkim
+    - opendmarc
     - spamassassin
     - amavis
+    - postfix-policyd-spf
     - postfix
     - postfix.config
-    - postfix-policyd-spf
     - dovecot
     - roundcube
   'testing*':

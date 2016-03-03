@@ -1,0 +1,10 @@
+## NOTE: This file is managed by Salt.  Changes should be made in the git
+## repo, or they will be lost on the next salt run.
+
+# Command-line options specified here will override the contents of
+# /etc/opendmarc.conf. See opendmarc(8) for a complete list of options.
+#DAEMON_OPTS=""
+
+# The opendmarc.conf "Socket" value is used if the socket variable is set to
+# an empty value.
+SOCKET=""
