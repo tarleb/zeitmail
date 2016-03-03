@@ -35,7 +35,6 @@ letsencrypt config:
     - mode: 644
     - makedirs: True
     - contents: |
-        webroot
         webroot-path = /var/www/letsencrypt
         domains = {{subdomains|join(',')}}
         rsa-key-size = 4096
@@ -44,10 +43,10 @@ get letsencrypt certificate:
   cmd.run:
     - name: >
         letsencrypt certonly
-        -a webroot
         --config {{domain_config_file}}
         --non-interactive
-        --dry-run
+        --test-cert
+        --standalone
         --email {{email}}
         {{'--agree-tos' if agree_tos else '' }}
     - creates: /etc/letsencrypt/live/{{domain}}/fullchain.pem
@@ -59,7 +58,7 @@ get letsencrypt certificate:
   file.directory:
     - user: root
     - group: root
-    - mode: 644
+    - mode: 755
     - makedirs: True
 
 /etc/letsencrypt/renew-webroot.sh:
