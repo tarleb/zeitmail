@@ -16,6 +16,20 @@ staging:
       dkim:
         sign: True
 
+      # Let's Encrypt
+      letsencrypt:
+        # Email to use for the Let's Encrypt account
+        #email: yourname@example.com
+
+        # Whether to use the ACME protocol via webroot to get/renew certs.
+        use_webroot: True
+        # Set this to True ONLY IF you agree to the Let's Entrypt Subscriber
+        # Agreement
+        # <https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf>
+        # See <https://letsencrypt.org/repository> for the Let's Encrypt
+        # Policy and Legal Repository.
+        agree_tos: False
+
       # Settings intended for testing only.  DO NOT enable this on a live
       # system.
       testing:

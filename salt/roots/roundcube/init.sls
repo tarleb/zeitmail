@@ -11,7 +11,7 @@ roundcube:
       - roundcube
       - roundcube-pgsql
     - require:
-      - file: /etc/apt/preferences.d/roundcube.pref
+      - file: /etc/apt/preferences.d/10-roundcube.pref
       - pkg: php
       - service: postgresql
 
@@ -55,8 +55,9 @@ roundcube nginx site:
     - user: root
     - group: root
     - mode: 644
-    - require:
-      - pkg: nginx
+    - makedirs: True
+    - watch_in:
+      - service: nginx
 
 enable roundcube site:
   file.symlink:
