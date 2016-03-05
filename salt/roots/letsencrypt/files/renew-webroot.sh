@@ -50,7 +50,6 @@ fi
 letsencrypt certonly                       \
             -a webroot                     \
             --non-interactive              \
-            --test-cert                    \
             --renew-by-default             \
             --agree-tos                    \
             --config $webroot_file

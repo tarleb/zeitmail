@@ -45,7 +45,6 @@ get letsencrypt certificate:
         letsencrypt certonly
         --config {{domain_config_file}}
         --non-interactive
-        --test-cert
         --standalone
         --email {{email}}
         {{'--agree-tos' if agree_tos else '' }}
