@@ -68,3 +68,11 @@ get letsencrypt certificate:
     - group: root
     - mode: 600
     - makedirs: True
+
+renew letsencrypt certificates for {{domain}}:
+  cron.present:
+    - name: /etc/letsencrypt/renew-webroot.sh {{domain}} {{'agree_tos' if agree_tos else ''}}
+    - user: root
+    - hour: 3
+    - minute: random
+    - identifier: LETSENCRYPT CERTIFICATE UPDATE
