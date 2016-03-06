@@ -3,6 +3,7 @@
   'www.' ~ grains['domain']
 ] -%}
 include:
+  - diffie-hellman-parameters
   - letsencrypt
 
 nginx:
@@ -23,6 +24,8 @@ nginx:
     - mode: 644
     - watch_in:
       - service: nginx
+    - require:
+      - file: /etc/ssl/dh/params.pem
 
 # Backup site config files.  May be overwritten later.
 {% for domain in domains %}
