@@ -33,3 +33,24 @@
       - file: /etc/ssl/dh/group16.pem
     - require:
       - file: /etc/ssl/dh/group16.pem
+
+{%- if salt['pillar.get']('security:custom_dh_params', False) -%}
+{%- set bits = salt['pillar.get']('security:min_dh_bits', 4096) -%}
+{%- set gen_dh_param_cmd =
+    'openssl dhparam -out /etc/ssl/dh/custom' ~ bits ~ '.pem ' ~ bits
+%}
+Generate custom {{bits}}-bit DH parameters:
+  cmd.run:
+    - name: {{gen_dh_param_cmd}}
+    - user: root
+    - creates: /etc/ssl/dh/custom{{bits}}.pem
+
+Custom {{bits}}-bit DH parameters regeneration:
+  cron.present:
+    - name: nice -n19 {{gen_dh_param_cmd}}
+    - user: root
+    - hour: 1
+    - minute: random
+    - daymonth: random
+    - identifier: REGENERATE CUSTOM {{bits}}-BIT DH PARAMS
+{%- endif %}
