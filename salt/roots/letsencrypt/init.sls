@@ -65,7 +65,7 @@ get letsencrypt certificate:
     - source: salt://{{slspath}}/files/renew-webroot.sh
     - user: root
     - group: root
-    - mode: 600
+    - mode: 700
     - makedirs: True
 
 renew letsencrypt certificates for {{domain}}:
