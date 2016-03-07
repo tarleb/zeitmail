@@ -28,6 +28,34 @@ nginx:
     - require:
       - file: /etc/ssl/dh/params.pem
 
+# Reply with empty answer unless a host exists
+/etc/nginx/sites-available/default:
+  file.managed:
+    - contents: |
+        # Drop requests to unknown hosts
+        #
+        # If no default server is defined, nginx will use the first matching
+        # server.  To prevent host header attacks, or other potential problems,
+        # the request is dropped returning 444 "no response".
+        server {
+        	listen 80 default_server;
+        	listen [::]:80 default_server;
+        	return 444;
+        }
+    - user: root
+    - group: root
+    - mode: 644
+    - watch_in:
+      - service: nginx
+
+/etc/nginx/sites-enabled/default:
+  file.symlink:
+    - target: /etc/nginx/sites-available/default
+    - require:
+      - file: /etc/nginx/sites-available/default
+    - watch_in:
+      - service: nginx
+
 # Backup site config files.  May be overwritten later.
 {% for subdomain in subdomains %}
 /etc/nginx/sites-available/{{subdomain}}.conf:
@@ -39,6 +67,8 @@ nginx:
         server_name: {{subdomain}}
     - use:
       - file: /etc/nginx/nginx.conf
+    - watch_in:
+      - service: nginx
 
 /etc/nginx/sites-enabled/{{subdomain}}.conf:
   file.symlink:
