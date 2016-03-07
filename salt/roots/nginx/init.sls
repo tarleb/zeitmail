@@ -42,9 +42,9 @@ nginx:
 
 /etc/nginx/sites-enabled/{{subdomain}}.conf:
   file.symlink:
-    - target: /etc/nginx/sites-available/{{domain}}.conf
+    - target: /etc/nginx/sites-available/{{subdomain}}.conf
     - require:
-      - file: /etc/nginx/sites-available/{{domain}}.conf
+      - file: /etc/nginx/sites-available/{{subdomain}}.conf
     - watch_in:
       - service: nginx
 {% endfor %}
