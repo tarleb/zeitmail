@@ -39,6 +39,8 @@ append_dot_mydomain = no
 ###
 smtpd_tls_cert_file = /etc/letsencrypt/live/{{domain}}/fullchain.pem
 smtpd_tls_key_file = /etc/letsencrypt/live/{{domain}}/privkey.pem
+# Disable authentication unless the connection is encrypted
+smtpd_tls_auth_only = yes
 # Enable opportunistic encryption
 smtp_tls_loglevel = 1
 smtpd_tls_loglevel = 1
