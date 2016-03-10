@@ -23,5 +23,3 @@ base:
     - dovecot
     - roundcube
     - letsencrypt
-  'testing*':
-    - python3
