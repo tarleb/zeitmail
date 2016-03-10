@@ -1,5 +1,9 @@
 include:
+  - amavis
+  - diffie-hellman-parameters
+  - postfix-policyd-spf
   - opendkim
+  - opendmarc
 
 postfix:
   pkg.installed:
@@ -11,7 +15,11 @@ postfix:
     - reload: True
     - require:
       - pkg: postfix
+      - pkg: postfix-policyd-spf
+      - service: amavis
       - service: opendkim
+      - service: opendmarc
+      - file: /etc/ssl/dh/params.pem
 
 /etc/aliases:
   file.managed:

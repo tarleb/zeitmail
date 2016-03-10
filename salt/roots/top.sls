@@ -1,12 +1,7 @@
 base:
   '*':
     - apt
-    - opendkim
-    - opendmarc
-    - spamassassin
-    - amavis
-    - postfix-policyd-spf
+    - letsencrypt
     - postfix
     - dovecot
     - roundcube
-    - letsencrypt
