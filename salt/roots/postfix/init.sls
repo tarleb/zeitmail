@@ -2,7 +2,10 @@ include:
   - opendkim
 
 postfix:
-  pkg.installed: []
+  pkg.installed:
+    - pkgs:
+      - postfix
+      - postfix-pcre
   service.running:
     - enable: True
     - reload: True

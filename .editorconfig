@@ -17,3 +17,6 @@ indent_size = 2
 [*.c{,on}f]
 indent_size = 8
 indent_style = tab
+
+[*.pcre]
+indent_style = tab

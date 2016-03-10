@@ -44,6 +44,8 @@ smtpd_tls_auth_only = yes
 # Enable opportunistic encryption
 smtp_tls_loglevel = 1
 smtpd_tls_loglevel = 1
+smtp_tls_note_starttls_offer = yes
+smtpd_tls_received_header = yes
 smtp_tls_security_level = may
 smtpd_tls_security_level = may
 # Export ciphers are next to useless.  Require somewhat decent encryption.
@@ -61,7 +63,7 @@ smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
 tls_high_cipherlist = EDH+aRSA+AES256:EECDH+aRSA+AES256
 # Diffie-Hellman parameters.  Export ciphers are disabled, so the respective
 # parameter is not set.
-smtpd_tls_dh1024_param_file = /etc/ssl/dh/param.pem
+smtpd_tls_dh1024_param_file = /etc/ssl/dh/params.pem
 # TLS session cache
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache

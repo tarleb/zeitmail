@@ -41,3 +41,11 @@ include:
     - mode: 644
     - watch_in:
       - service: postfix
+
+/etc/postfix/submission_header_checks.pcre:
+  file.managed:
+    - source: salt://postfix/files/submission_header_checks.pcre
+    - use:
+      - file: /etc/postfix/main.cf
+    - watch_in:
+      - service: postfix
