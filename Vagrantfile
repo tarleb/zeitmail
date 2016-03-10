@@ -37,4 +37,26 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     staging.vm.synced_folder "salt/roots/", "/srv/salt/", disabled: true
     staging.vm.synced_folder "salt/pillar/", "/srv/pillar/", disabled: true
   end
+
+  ### Test VM
+  ### =======
+  config.vm.define "testing" do |testing|
+    testing.vm.network "private_network", ip: "192.168.42.2"
+    testing.vm.hostname = "testing.zeitmail.test"
+
+    # Tests
+    testing.vm.synced_folder "tests/", "/home/vagrant/tests",
+      owner: "vagrant",
+      group: "vagrant",
+      mount_options: ["dmode=770,fmode=660"]
+
+    # Let the machine know where the test mail server is.
+    testing.vm.provision :shell, inline: "echo 192.168.23.2 zeitmail.test mail.zeitmail.test >> /etc/hosts"
+
+    # Provision with Salt
+    testing.vm.provision :salt do |salt|
+      salt.minion_config = "salt/testing.minion"
+      salt.run_highstate = true
+    end
+  end
 end

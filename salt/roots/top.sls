@@ -5,3 +5,5 @@ base:
     - postfix
     - dovecot
     - roundcube
+  'testing*':
+    - python3
