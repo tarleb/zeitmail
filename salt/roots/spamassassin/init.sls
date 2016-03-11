@@ -1,7 +1,7 @@
 spamassassin:
   pkg.installed: []
-  service.running:
-    - enable: True
+  service.dead:
+    - enable: False
     - require:
       - pkg: spamassassin
 
