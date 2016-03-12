@@ -1,0 +1,7 @@
+zeitmail:
+  domain: {{salt['grains.get']('domain')}}
+  ssl:
+    certificate:
+      ca: self-signed
+      file: /etc/ssl/certs/{{salt['grains.get']('domain')}}.pem
+      key_file: /etc/ssl/private/{{salt['grains.get']('domain')}}.key

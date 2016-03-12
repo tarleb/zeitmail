@@ -1,0 +1,7 @@
+{% import_yaml 'zeitmail-defaults.yaml' as zeitmail_defaults %}
+{%
+set zeitmail = salt['pillar.get'](
+    'zeitmail',
+    default=zeitmail_defaults.zeitmail,
+    merge=True)
+%}

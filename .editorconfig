@@ -11,7 +11,7 @@ trim_trailing_whitespace = true
 [Vagrantfile]
 indent_size = 2
 
-[*.sls]
+[*.{sls,yaml}]
 indent_size = 2
 
 [*.c{,on}f]

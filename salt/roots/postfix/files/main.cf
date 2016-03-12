@@ -1,5 +1,6 @@
 # NOTE: This file is managed by Salt.
-{%- set domain = salt['grains.get']('domain') %}
+{%- from "zeitmail.jinja" import zeitmail with context -%}
+{%- set domain = zeitmail.domain -%}
 {%- set fqdn = salt['grains.get']('fqdn') %}
 
 # Domains
@@ -37,8 +38,8 @@ append_dot_mydomain = no
 ###
 ### TLS parameters
 ###
-smtpd_tls_cert_file = /etc/letsencrypt/live/{{domain}}/fullchain.pem
-smtpd_tls_key_file = /etc/letsencrypt/live/{{domain}}/privkey.pem
+smtpd_tls_cert_file = {{zeitmail.ssl.certificate.file}}
+smtpd_tls_key_file = {{zeitmail.ssl.certificate.key_file}}
 # Disable authentication unless the connection is encrypted
 smtpd_tls_auth_only = yes
 # Enable opportunistic encryption

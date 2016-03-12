@@ -1,5 +1,7 @@
+{%- from "zeitmail.jinja" import zeitmail with context -%}
 include:
   - amavis
+  - certificates
   - diffie-hellman-parameters
   - postfix-policyd-spf
   - opendkim
@@ -20,6 +22,8 @@ postfix:
       - service: opendkim
       - service: opendmarc
       - file: /etc/ssl/dh/params.pem
+      - file: {{zeitmail.ssl.certificate.file}}
+      - file: {{zeitmail.ssl.certificate.key_file}}
 
 /etc/aliases:
   file.managed:

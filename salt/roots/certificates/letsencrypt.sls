@@ -1,13 +1,27 @@
-{%- set domain = salt['grains.get']('domain') %}
+{%- from "zeitmail.jinja" import zeitmail with context -%}
+{%- set domain = zeitmail.domain -%}
 {%- set email = salt['grains.get'](
         'letsencrypt:email',
         'postmaster@' ~ domain) -%}
 {%- set subdomains = [domain, 'mail.' ~ domain, 'www.' ~ 'domain'] -%}
 {%- set domain_config_file = '/etc/letsencrypt/config-{{domain}}.ini' -%}
 {%- set agree_tos = salt['grains.get']('letsencrypt:agree_tos', False) -%}
-
 include:
   - apt
+
+# Public key
+{{zeitmail.ssl.certificate.file}}:
+  file.symlink:
+    - target: /etc/letsencrypt/live/{{domain}}/fullchain.pem
+    - require:
+      - cmd: get letsencrypt certificate
+
+# Private key
+{{zeitmail.ssl.certificate.key_file}}:
+  file.symlink:
+    - target: /etc/letsencrypt/live/{{domain}}/privkey.pem
+    - require:
+      - cmd: get letsencrypt certificate
 
 /etc/apt/preferences.d/10-python-cryptography.pref:
   file.managed:

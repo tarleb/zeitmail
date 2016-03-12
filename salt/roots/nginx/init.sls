@@ -1,8 +1,9 @@
-{%- set domain = salt['grains.get']('domain') -%}
+{%- from "zeitmail.jinja" import zeitmail with context -%}
+{%- set domain = zeitmail.domain -%}
 {%- set subdomains = [domain, 'mail.' ~ domain, 'www.' ~ domain] -%}
 include:
+  - certificates
   - diffie-hellman-parameters
-  - letsencrypt
 
 nginx:
   pkg.installed: []
@@ -11,7 +12,8 @@ nginx:
     - reload: True
     - require:
       - pkg: nginx
-      - cmd: get letsencrypt certificate
+      - file: {{zeitmail.ssl.certificate.file}}
+      - file: {{zeitmail.ssl.certificate.key_file}}
 
 /etc/nginx/nginx.conf:
   file.managed:
@@ -23,8 +25,8 @@ nginx:
     - makedirs: True
     - dir_mode: 755
     - context:
-        certificate_file: /etc/letsencrypt/live/{{domain}}/fullchain.pem
-        certificate_key_file: /etc/letsencrypt/live/{{domain}}/privkey.pem
+        certificate_file: {{zeitmail.ssl.certificate.file}}
+        certificate_key_file: {{zeitmail.ssl.certificate.key_file}}
     - watch_in:
       - service: nginx
     - require:
