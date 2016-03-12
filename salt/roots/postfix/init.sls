@@ -73,6 +73,11 @@ postmap /etc/postfix/virtual:
     - group: root
     - mode: 644
     - template: jinja
+    - context:
+        certificate_file: {{zeitmail.ssl.certificate.file}}
+        certificate_key_file: {{zeitmail.ssl.certificate.key_file}}
+        domain: {{zeitmail.domain}}
+        fqdn: salt['grains.get']('fqdn') %}
     - require:
       - pkg: postfix
     - watch_in:

@@ -33,6 +33,9 @@ dovecot:
     - user: root
     - group: root
     - mode: 644
+    - context:
+        certificate_file: {{zeitmail.ssl.certificate.file}}
+        certificate_key_file: {{zeitmail.ssl.certificate.key_file}}
     - require:
       - pkg: dovecot-core
     - watch_in:
