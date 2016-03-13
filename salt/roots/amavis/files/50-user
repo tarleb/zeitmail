@@ -34,6 +34,21 @@ $inet_socket_bind = ['[::1]'];          # Only listen on IPv6
 $notify_method  = 'smtp:[::1]:10025';
 $forward_method = 'smtp:[::1]:10025';
 
+{% if salt['grains.get']('testing:spamassassin', False) -%}
+### BEGIN TEST SETTINGS ###
+#
+# This section should always be the last in this file.  It is used to
+# overwrite any normal settings, ensuring repeatable tests in testing
+# environments.  This section should not be present in a production
+# environment.
+#
+{% if salt['grains.get']('testing:spamassassin:simulate_untrusted_network', False) -%}
+@mynetworks = qw( 127.0.0.0/8 [::1] 169.254.0.0/16 [fe80::]/10
+                  192.168.23.2/32 [fc00::]/7 );
+{%- endif %}
+### END TEST SETTINGS ###
+{%- endif %}
+
 #------------ Do not modify anything below this line -------------
 # Local Variables:
 # mode: perl
