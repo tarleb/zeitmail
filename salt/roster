@@ -29,8 +29,3 @@ staging:
         # See <https://letsencrypt.org/repository> for the Let's Encrypt
         # Policy and Legal Repository.
         agree_tos: False
-
-      # Settings intended for testing only.  DO NOT enable this on a live
-      # system.
-      testing:
-        load_data: False
