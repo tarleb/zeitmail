@@ -20,6 +20,8 @@ nginx:
     - user: root
     - group: root
     - mode: 644
+    - makedirs: True
+    - dir_mode: 755
     - context:
         certificate_file: /etc/letsencrypt/live/{{domain}}/fullchain.pem
         certificate_key_file: /etc/letsencrypt/live/{{domain}}/privkey.pem
@@ -45,6 +47,8 @@ nginx:
     - user: root
     - group: root
     - mode: 644
+    - makedirs: True
+    - dir_mode: 755
     - watch_in:
       - service: nginx
 
@@ -53,6 +57,8 @@ nginx:
     - target: /etc/nginx/sites-available/default
     - require:
       - file: /etc/nginx/sites-available/default
+    - makedirs: True
+    - dir_mode: 755
     - watch_in:
       - service: nginx
 
@@ -75,6 +81,8 @@ nginx:
     - target: /etc/nginx/sites-available/{{subdomain}}.conf
     - require:
       - file: /etc/nginx/sites-available/{{subdomain}}.conf
+    - makedirs: True
+    - dir_mode: 755
     - watch_in:
       - service: nginx
 {% endfor %}

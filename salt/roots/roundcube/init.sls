@@ -12,6 +12,7 @@ roundcube:
       - roundcube-pgsql
     - require:
       - file: /etc/apt/preferences.d/10-roundcube.pref
+      - pkg: nginx
       - pkg: php
       - service: postgresql
 

@@ -1,3 +1,6 @@
+include:
+  - spamassassin
+
 amavis:
   pkg.installed:
     - name: amavisd-new
@@ -5,6 +8,8 @@ amavis:
     - enable: True
     - require:
       - pkg: amavis
+      - pkg: spamassassin
+      - file: spamassassin config
 
 /etc/amavis/conf.d/50-user:
   file.managed:

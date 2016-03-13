@@ -1,7 +1,7 @@
 spamassassin:
   pkg.installed: []
-  service.running:
-    - enable: True
+  service.dead:
+    - enable: False
     - require:
       - pkg: spamassassin
 
@@ -9,8 +9,9 @@ spamassassin-client:
   pkg.installed:
     - name: spamc
 
-/etc/spamassassin/local.cf:
+spamassassin config:
   file.managed:
+    - name: /etc/spamassassin/local.cf
     - source: salt://spamassassin/files/local.cf
     - template: jinja
     - watch_in:
