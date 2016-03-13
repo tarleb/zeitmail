@@ -1,4 +1,5 @@
-{% set domain = salt['grains.get']('domain', 'example.com') %}
+{%- from "zeitmail.jinja" import zeitmail with context -%}
+{%- set domain = zeitmail.domain.mail -%}
 
 opendkim:
   pkg.installed:

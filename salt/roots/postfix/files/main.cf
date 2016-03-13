@@ -2,8 +2,8 @@
 
 # Domains
 myhostname = {{fqdn}}
-myorigin = {{domain}}
-mydestination = {{fqdn}}, {{domain}}, localhost.local, localhost
+myorigin = {{mailname}}
+mydestination = {{fqdn}}, {{mailname}}, localhost.local, localhost
 relayhost =
 
 # Networking
@@ -95,7 +95,7 @@ milter_default_action = accept
 # OpenDKIM, OpenDMARC
 smtpd_milters = inet:localhost:10026, inet:localhost:10028
 non_smtpd_milters =
-	{% if salt['grains.get']('dkim:sign') -%}
+	{%- if dkim_sign -%}
 	inet:localhost:10026
 	{%- endif %}
 

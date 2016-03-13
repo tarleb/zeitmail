@@ -1,4 +1,3 @@
 base:
   '*':
-    - zeitmail
     - mail

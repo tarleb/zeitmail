@@ -1,3 +1,4 @@
+{%- from "zeitmail.jinja" import zeitmail with context -%}
 include:
   - spamassassin
 
@@ -15,6 +16,8 @@ amavis:
   file.managed:
     - source: salt://amavis/files/50-user
     - template: jinja
+    - context:
+        domain: {{zeitmail.domain.mail}}
     - require:
       - pkg: amavis
     - watch_in:

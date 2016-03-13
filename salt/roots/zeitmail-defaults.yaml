@@ -1,7 +1,17 @@
 zeitmail:
-  domain: {{salt['grains.get']('domain')}}
+  admin_mail:
+  dkim:
+    sign: yes
+  domain:
+    webmail: {{'mail.' ~ salt['grains.get']('domain')}}
+    mail: {{salt['grains.get']('domain')}}
+    additional:
+      - {{'www.' ~ salt['grains.get']('domain')}}
   ssl:
     certificate:
       ca: self-signed
       file: /etc/ssl/certs/{{salt['grains.get']('domain')}}.pem
       key_file: /etc/ssl/private/{{salt['grains.get']('domain')}}.key
+  letsencrypt:
+    email: {{'postmaster@' ~ salt['grains.get']('domain')}}
+    agree_tos: no

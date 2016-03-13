@@ -19,6 +19,8 @@ postmaster: root
 hostmaster: root
 
 ### Admin
-root: {{ grains.get('admin-user', 'vagrant') }}
+{%- if admin_mail %}
+root: {{admin_mail}}
+{%- endif %}
 admin: root
 nobody: root

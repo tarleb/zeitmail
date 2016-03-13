@@ -1,6 +1,8 @@
 {%- from "zeitmail.jinja" import zeitmail with context -%}
-{%- set domain = zeitmail.domain -%}
-{%- set subdomains = [domain, 'mail.' ~ domain, 'www.' ~ domain] -%}
+{%- set domains = [
+    zeitmail.domain.mail,
+    zeitmail.domain.webmail
+] + zeitmail.domain.additional -%}
 include:
   - certificates
   - diffie-hellman-parameters
@@ -64,25 +66,25 @@ nginx:
     - watch_in:
       - service: nginx
 
-# Backup site config files.  May be overwritten later.
-{% for subdomain in subdomains %}
-/etc/nginx/sites-available/{{subdomain}}.conf:
+# Placeholder site-config files.  May be overwritten later.
+{% for domain in domains %}
+/etc/nginx/sites-available/{{domain}}.conf:
   file.managed:
     - source: salt://{{slspath}}/files/domain.conf
     - template: jinja
     - replace: False
     - context:
-        server_name: {{subdomain}}
+        server_name: {{domain}}
     - use:
       - file: /etc/nginx/nginx.conf
     - watch_in:
       - service: nginx
 
-/etc/nginx/sites-enabled/{{subdomain}}.conf:
+/etc/nginx/sites-enabled/{{domain}}.conf:
   file.symlink:
-    - target: /etc/nginx/sites-available/{{subdomain}}.conf
+    - target: /etc/nginx/sites-available/{{domain}}.conf
     - require:
-      - file: /etc/nginx/sites-available/{{subdomain}}.conf
+      - file: /etc/nginx/sites-available/{{domain}}.conf
     - makedirs: True
     - dir_mode: 755
     - watch_in:

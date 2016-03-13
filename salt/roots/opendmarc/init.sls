@@ -1,3 +1,4 @@
+{%- from "zeitmail.jinja" import zeitmail with context -%}
 opendmarc:
   pkg.installed: []
   service.running:
@@ -24,6 +25,9 @@ opendmarc:
     - user: root
     - group: root
     - mode: 644
+    - context:
+        domain: "{{zeitmail.domain.mail}}"
+        fqdn: "{{salt['grains.get']('fqdn')}}"
     - require:
       - pkg: opendmarc
       - file: /etc/opendmarc/ignore.hosts
