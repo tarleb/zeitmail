@@ -1,5 +1,0 @@
-# -*- mode: yaml -*-
-
-id: testing.test
-file_client: local
-log_level: info
