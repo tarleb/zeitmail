@@ -1,11 +1,9 @@
 # NOTE: This file is managed by Salt.
-{%- set domain = salt['grains.get']('domain') %}
-{%- set fqdn = salt['grains.get']('fqdn') %}
 
 # Domains
 myhostname = {{fqdn}}
-myorigin = {{domain}}
-mydestination = {{fqdn}}, {{domain}}, localhost.local, localhost
+myorigin = {{mailname}}
+mydestination = {{fqdn}}, {{mailname}}, localhost.local, localhost
 relayhost =
 
 # Networking
@@ -37,8 +35,8 @@ append_dot_mydomain = no
 ###
 ### TLS parameters
 ###
-smtpd_tls_cert_file = /etc/letsencrypt/live/{{domain}}/fullchain.pem
-smtpd_tls_key_file = /etc/letsencrypt/live/{{domain}}/privkey.pem
+smtpd_tls_cert_file = {{certificate_file}}
+smtpd_tls_key_file = {{certificate_key_file}}
 # Disable authentication unless the connection is encrypted
 smtpd_tls_auth_only = yes
 # Enable opportunistic encryption
@@ -97,7 +95,7 @@ milter_default_action = accept
 # OpenDKIM, OpenDMARC
 smtpd_milters = inet:localhost:10026, inet:localhost:10028
 non_smtpd_milters =
-	{% if salt['grains.get']('dkim:sign') -%}
+	{%- if dkim_sign -%}
 	inet:localhost:10026
 	{%- endif %}
 

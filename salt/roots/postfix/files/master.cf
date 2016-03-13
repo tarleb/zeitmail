@@ -21,7 +21,7 @@ submission inet n       -       -       -       -       smtpd
   -o smtpd_sender_restrictions=$mua_sender_restrictions
   -o smtpd_recipient_restrictions=
   -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
-  -o smtpd_milters={{ 'inet:localhost:10026' if salt['grains.get']('dkim:sign') else '' }}
+  -o smtpd_milters={{ 'inet:localhost:10026' if dkim_sign else '' }}
   -o cleanup_service_name=subcleanup
 # Cleanup headers after receiving a mail via submission
 subcleanup	unix	n	-	-	-	0	cleanup

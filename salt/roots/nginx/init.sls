@@ -1,8 +1,11 @@
-{%- set domain = salt['grains.get']('domain') -%}
-{%- set subdomains = [domain, 'mail.' ~ domain, 'www.' ~ domain] -%}
+{%- from "zeitmail.jinja" import zeitmail with context -%}
+{%- set domains = [
+    zeitmail.domain.mail,
+    zeitmail.domain.webmail
+] + zeitmail.domain.additional -%}
 include:
+  - certificates
   - diffie-hellman-parameters
-  - letsencrypt
 
 nginx:
   pkg.installed: []
@@ -11,7 +14,8 @@ nginx:
     - reload: True
     - require:
       - pkg: nginx
-      - cmd: get letsencrypt certificate
+      - file: {{zeitmail.ssl.certificate.file}}
+      - file: {{zeitmail.ssl.certificate.key_file}}
 
 /etc/nginx/nginx.conf:
   file.managed:
@@ -23,8 +27,8 @@ nginx:
     - makedirs: True
     - dir_mode: 755
     - context:
-        certificate_file: /etc/letsencrypt/live/{{domain}}/fullchain.pem
-        certificate_key_file: /etc/letsencrypt/live/{{domain}}/privkey.pem
+        certificate_file: {{zeitmail.ssl.certificate.file}}
+        certificate_key_file: {{zeitmail.ssl.certificate.key_file}}
     - watch_in:
       - service: nginx
     - require:
@@ -62,25 +66,25 @@ nginx:
     - watch_in:
       - service: nginx
 
-# Backup site config files.  May be overwritten later.
-{% for subdomain in subdomains %}
-/etc/nginx/sites-available/{{subdomain}}.conf:
+# Placeholder site-config files.  May be overwritten later.
+{% for domain in domains %}
+/etc/nginx/sites-available/{{domain}}.conf:
   file.managed:
     - source: salt://{{slspath}}/files/domain.conf
     - template: jinja
     - replace: False
     - context:
-        server_name: {{subdomain}}
+        server_name: {{domain}}
     - use:
       - file: /etc/nginx/nginx.conf
     - watch_in:
       - service: nginx
 
-/etc/nginx/sites-enabled/{{subdomain}}.conf:
+/etc/nginx/sites-enabled/{{domain}}.conf:
   file.symlink:
-    - target: /etc/nginx/sites-available/{{subdomain}}.conf
+    - target: /etc/nginx/sites-available/{{domain}}.conf
     - require:
-      - file: /etc/nginx/sites-available/{{subdomain}}.conf
+      - file: /etc/nginx/sites-available/{{domain}}.conf
     - makedirs: True
     - dir_mode: 755
     - watch_in:

@@ -1,13 +1,26 @@
-{%- set domain = salt['grains.get']('domain') %}
-{%- set email = salt['grains.get'](
-        'letsencrypt:email',
-        'postmaster@' ~ domain) -%}
-{%- set subdomains = [domain, 'mail.' ~ domain, 'www.' ~ 'domain'] -%}
-{%- set domain_config_file = '/etc/letsencrypt/config-{{domain}}.ini' -%}
-{%- set agree_tos = salt['grains.get']('letsencrypt:agree_tos', False) -%}
-
+{%- from "zeitmail.jinja" import zeitmail with context -%}
+{%- set subdomains = [
+    zeitmail.domain.mail,
+    zeitmail.domain.webmail
+] + zeitmail.domain.additional -%}
+{%- set domain = zeitmail.domain.mail -%}
+{%- set domain_config_file = '/etc/letsencrypt/config-' ~ zeitmail.domain.mail ~ '.ini' -%}
 include:
   - apt
+
+# Public key
+{{zeitmail.ssl.certificate.file}}:
+  file.symlink:
+    - target: /etc/letsencrypt/live/{{domain}}/fullchain.pem
+    - require:
+      - cmd: get letsencrypt certificate
+
+# Private key
+{{zeitmail.ssl.certificate.key_file}}:
+  file.symlink:
+    - target: /etc/letsencrypt/live/{{domain}}/privkey.pem
+    - require:
+      - cmd: get letsencrypt certificate
 
 /etc/apt/preferences.d/10-python-cryptography.pref:
   file.managed:
@@ -46,9 +59,9 @@ get letsencrypt certificate:
         --config {{domain_config_file}}
         --non-interactive
         --standalone
-        --email {{email}}
-        {{'--agree-tos' if agree_tos else '' }}
-    - creates: /etc/letsencrypt/live/{{domain}}/fullchain.pem
+        --email {{zeitmail.letsencrypt.email}}
+        {{'--agree-tos' if zeitmail.letsencrypt.agree_tos else '' }}
+    - creates: /etc/letsencrypt/live/{{zeitmail.domain.mail}}/fullchain.pem
     - require:
       - file: letsencrypt config
       - file: /var/www/letsencrypt
@@ -70,7 +83,7 @@ get letsencrypt certificate:
 
 renew letsencrypt certificates for {{domain}}:
   cron.present:
-    - name: /etc/letsencrypt/renew-webroot.sh {{domain}} {{'agree_tos' if agree_tos else ''}}
+    - name: /etc/letsencrypt/renew-webroot.sh {{zeitmail.domain.mail}} {{'agree_tos' if zeitmail.letsencrypt.agree_tos else ''}}
     - user: root
     - hour: 3
     - minute: random

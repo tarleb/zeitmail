@@ -1,0 +1,20 @@
+zeitmail:
+  admin_mail:
+  bits_security: 128
+  dh:
+    custom_parameters: no
+  dkim:
+    sign: yes
+  domain:
+    webmail: {{'mail.' ~ salt['grains.get']('domain')}}
+    mail: {{salt['grains.get']('domain')}}
+    additional:
+      - {{'www.' ~ salt['grains.get']('domain')}}
+  ssl:
+    certificate:
+      ca: self-signed
+      file: /etc/ssl/certs/{{salt['grains.get']('domain')}}.pem
+      key_file: /etc/ssl/private/{{salt['grains.get']('domain')}}.key
+  letsencrypt:
+    email: {{'postmaster@' ~ salt['grains.get']('domain')}}
+    agree_tos: no

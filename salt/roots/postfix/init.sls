@@ -1,5 +1,7 @@
+{%- from "zeitmail.jinja" import zeitmail with context -%}
 include:
   - amavis
+  - certificates
   - diffie-hellman-parameters
   - postfix-policyd-spf
   - opendkim
@@ -20,6 +22,8 @@ postfix:
       - service: opendkim
       - service: opendmarc
       - file: /etc/ssl/dh/params.pem
+      - file: {{zeitmail.ssl.certificate.file}}
+      - file: {{zeitmail.ssl.certificate.key_file}}
 
 /etc/aliases:
   file.managed:
@@ -28,6 +32,8 @@ postfix:
     - group: root
     - mode: 644
     - template: jinja
+    - context:
+        admin_mail: {{zeitmail.admin_mail if zeitmail.admin_mail else ''}}
     - require:
       - pkg: postfix
 
@@ -69,6 +75,12 @@ postmap /etc/postfix/virtual:
     - group: root
     - mode: 644
     - template: jinja
+    - context:
+        certificate_file: {{zeitmail.ssl.certificate.file}}
+        certificate_key_file: {{zeitmail.ssl.certificate.key_file}}
+        dkim_sign: {{zeitmail.dkim.sign}}
+        fqdn: {{salt['grains.get']('fqdn')}}
+        mailname: {{zeitmail.domain.mail}}
     - require:
       - pkg: postfix
     - watch_in:
@@ -81,14 +93,19 @@ postmap /etc/postfix/virtual:
     - group: root
     - mode: 644
     - template: jinja
+    - context:
+        dkim_sign: {{zeitmail.dkim.sign}}
     - require:
       - pkg: postfix
     - watch_in:
       - service: postfix
 
+# This file is a Debian-specific to specify the domain from which mail should
+# appear to be sent.  This isn't used in the configs, but is edited for
+# consistency.
 /etc/mailname:
   file.managed:
-    - contents: {{grains['fqdn']}}
+    - contents: {{zeitmail.domain.mail}}
     - user: root
     - group: root
     - mode: 644

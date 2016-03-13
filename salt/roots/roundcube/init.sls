@@ -1,4 +1,4 @@
-{%- set domain = salt['grains.get']('domain', 'zeitmail.test') -%}
+{%- from "zeitmail.jinja" import zeitmail with context -%}
 include:
   - postgresql
   - php
@@ -50,9 +50,11 @@ roundcube:
 
 roundcube nginx site:
   file.managed:
-    - name: /etc/nginx/sites-available/mail.{{domain}}.conf
+    - name: /etc/nginx/sites-available/{{zeitmail.domain.webmail}}.conf
     - source: salt://{{slspath}}/files/nginx-mail-site.conf
     - template: jinja
+    - context:
+        webmail_domain: "{{zeitmail.domain.webmail}}"
     - user: root
     - group: root
     - mode: 644
@@ -62,8 +64,8 @@ roundcube nginx site:
 
 enable roundcube site:
   file.symlink:
-    - name: /etc/nginx/sites-enabled/mail.{{domain}}.conf
-    - target: /etc/nginx/sites-available/mail.{{domain}}.conf
+    - name: /etc/nginx/sites-enabled/{{zeitmail.domain.webmail}}.conf
+    - target: /etc/nginx/sites-available/{{zeitmail.domain.webmail}}.conf
     - require:
       - file: roundcube nginx site
     - watch_in:
