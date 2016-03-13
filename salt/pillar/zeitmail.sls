@@ -7,6 +7,16 @@ zeitmail:
   ## system user.
   #admin_mail:
 
+  ## (APPROXIMATE) bits of security used for encryption.  A value between 128
+  ## and 192 bits should be specified here.
+  bits_security: 128
+
+  ## Diffie-Hellman parameters.
+  dh:
+    ## Whether to generate custom DH parameters.  This can take quite a long
+    ## time.  Self-generated parameters are regenerated once a month.
+    custom_parameters: no
+
   ## Domain Key Identified Mail signing requires additional TXT records in
   ## DNS.  This is not always possible with some hosts.
   dkim:

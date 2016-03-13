@@ -1,5 +1,8 @@
 zeitmail:
   admin_mail:
+  bits_security: 128
+  dh:
+    custom_parameters: no
   dkim:
     sign: yes
   domain:
