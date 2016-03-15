@@ -6,10 +6,10 @@ domain="$1"
 agree_tos="$2"
 
 # Config and certificate file
-webroot_file="/etc/letsencrypt/webroot-$domain.ini"
+config_file="/etc/letsencrypt/config-$domain.ini"
 cert_file="/etc/letsencrypt/live/$domain/fullchain.pem"
-if [ ! -f "$webroot_file" ]; then
-	printf "[ERROR] Couldn't find webroot file $webroot_file.\n"
+if [ ! -f "$config_file" ]; then
+	printf "[ERROR] Couldn't find config file $config_file.\n"
     exit 1
 fi
 if [ ! -f "$cert_file" ]; then
@@ -52,7 +52,7 @@ letsencrypt certonly                       \
             --non-interactive              \
             --renew-by-default             \
             --agree-tos                    \
-            --config $webroot_file
+            --config $config_file
 
 if [ $? -gt 0 ]; then
     printf "[ERROR] Renewal process failed.\n"
