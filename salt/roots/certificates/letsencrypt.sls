@@ -83,7 +83,7 @@ get letsencrypt certificate:
 
 renew letsencrypt certificates for {{domain}}:
   cron.present:
-    - name: /etc/letsencrypt/renew-webroot.sh {{zeitmail.domain.mail}} {{'agree_tos' if zeitmail.letsencrypt.agree_tos else ''}}
+    - name: /etc/letsencrypt/renew-webroot.sh -q {{zeitmail.domain.mail}} {{'agree_tos' if zeitmail.letsencrypt.agree_tos else ''}}
     - user: root
     - hour: 3
     - minute: random
