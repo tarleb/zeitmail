@@ -68,6 +68,7 @@ smtpd_tls_session_cache_database =
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 # Prefer the server's cipherlist order over that of the client
 tls_preempt_cipherlist = yes
+tls_ssl_options = NO_COMPRESSION
 
 
 ###
