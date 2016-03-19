@@ -1,6 +1,11 @@
+include:
+  - postfix
+
 postfix-policyd-spf:
   pkg.installed:
     - name: postfix-policyd-spf-python
+    - require:
+      - pkg: postfix
 
 /etc/postfix-policyd-spf-python/policyd-spf.conf:
   file.managed:
