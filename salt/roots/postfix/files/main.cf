@@ -66,6 +66,8 @@ smtpd_tls_dh1024_param_file = /etc/ssl/dh/params.pem
 smtpd_tls_always_issue_session_ids = no
 smtpd_tls_session_cache_database =
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+# Prefer the server's cipherlist order over that of the client
+tls_preempt_cipherlist = yes
 
 
 ###
