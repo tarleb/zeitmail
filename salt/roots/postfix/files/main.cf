@@ -62,9 +62,13 @@ tls_high_cipherlist = EDH+aRSA+AES256:EECDH+aRSA+AES256
 # Diffie-Hellman parameters.  Export ciphers are disabled, so the respective
 # parameter is not set.
 smtpd_tls_dh1024_param_file = /etc/ssl/dh/params.pem
-# TLS session cache
-smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+# Disable TLS session caching on the server
+smtpd_tls_always_issue_session_ids = no
+smtpd_tls_session_cache_database =
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+# Prefer the server's cipherlist order over that of the client
+tls_preempt_cipherlist = yes
+tls_ssl_options = NO_COMPRESSION
 
 
 ###
