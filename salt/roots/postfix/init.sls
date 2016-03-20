@@ -119,3 +119,18 @@ postmap /etc/postfix/virtual:
       - file: /etc/postfix/main.cf
     - watch_in:
       - service: postfix
+
+/etc/postfix/helo_checks:
+  file.managed:
+    - source: salt://{{slspath}}/files/helo_checks
+    - context:
+        fqdn: {{salt['grains.get']('fqdn')}}
+        domain: {{zeitmail.domain.mail}}
+    - use:
+      - file: /etc/postfix/main.cf
+  cmd.wait:
+    - name: postmap /etc/postfix/helo_checks
+    - user: root
+    - umask: 022
+    - watch:
+      - file: /etc/postfix/helo_checks

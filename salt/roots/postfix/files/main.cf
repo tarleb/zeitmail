@@ -74,8 +74,24 @@ tls_ssl_options = NO_COMPRESSION
 ###
 ### Spam control
 ###
-smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
-smtpd_recipient_restrictions = check_policy_service unix:private/policy-spf
+smtpd_relay_restrictions =
+	permit_mynetworks
+	permit_sasl_authenticated
+	reject_unauth_destination
+smtpd_helo_restrictions = check_recipient_access hash:/etc/postfix/helo_checks
+smtpd_recipient_restrictions =
+	reject_invalid_hostname
+	reject_non_fqdn_hostname
+	reject_non_fqdn_sender
+	reject_non_fqdn_recipient
+	reject_unknown_sender_domain
+	reject_unknown_recipient_domain
+	permit_mynetworks
+	check_policy_service unix:private/policyd-spf
+	permit
+smtpd_data_restrictions =
+	reject_unauth_pipelining
+	permit
 
 ## Require that a reply could be sent to the envelope senders
 strict_rfc821_envelopes = yes

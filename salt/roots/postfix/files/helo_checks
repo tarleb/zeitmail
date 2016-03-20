@@ -1,0 +1,4 @@
+# Reject clients impersonating this server
+{{fqdn}} REJECT You cannot be me, I'm me
+{{domain}} REJECT Use submission to send mail from within the domain
+localhost REJECT You are not me
