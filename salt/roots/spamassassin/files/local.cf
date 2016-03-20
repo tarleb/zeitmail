@@ -46,3 +46,8 @@ score CUST_DMARC_PASS -1.0
 # DKIM failure
 meta CUST_DKIM_SIGNED_INVALID DKIM_SIGNED && !(DKIM_VALID || DKIM_VALID_AU)
 score CUST_DKIM_SIGNED_INVALID 4.9
+
+# Add senders whose mails are often wrongly tagges as spam
+{% for wl_address in salt['pillar.get']('spamassassin:whitelist_from_rcvd', []) -%}
+def_whitelist_from_rcvd  {{wl_address}}
+{% endfor -%}
