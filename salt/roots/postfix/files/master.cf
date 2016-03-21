@@ -8,8 +8,13 @@
 # service type  private unpriv  chroot  wakeup  maxproc command + args
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
-smtp      inet  n       -       -       -       -       smtpd
+# SMTP port 25 involving postscreen
+smtp      inet  n       -       -       -       1       postscreen
+smtpd     pass  -       -       -       -       -       smtpd
   -o content_filter=amavisfeed:[::1]:10024
+dnsblog   unix  -       -       -       -       0       dnsblog
+tlsproxy  unix  -       -       -       -       0       tlsproxy
+# Submission
 submission inet n       -       -       -       -       smtpd
   -o syslog_name=postfix/submission
   -o smtpd_tls_security_level=encrypt
