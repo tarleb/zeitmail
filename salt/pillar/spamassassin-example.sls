@@ -1,3 +1,4 @@
 spamassassin:
-  whitelist_from_rcvd:
-    - oss-security@lists.openwall.com openwall.com
+  local:
+    whitelist_to:
+      - oss-security@lists.openwall.com
