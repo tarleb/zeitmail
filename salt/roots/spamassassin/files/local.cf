@@ -13,7 +13,44 @@ report_safe 0
 add_header ham HAM-Report _REPORT_
 
 # Set the threshold at which a message is considered spam
-required_score 4.0
+required_score 5.8
 
 # Don't use Bayesian classifier (for now)
 use_bayes 0
+
+###
+### SPF, DKIM, and DMARC
+###
+# This section includes suggestions from
+# https://www.skelleton.net/2015/03/21/how-to-eliminate-spam
+
+# SPF failure score adjustments
+score SPF_FAIL 3.5
+score SPF_SOFTFAIL 2.8
+score SPF_HELO_FAIL 4.0
+score SPF_HELO_SOFTFAIL 3.2
+
+# DKIM when used with ADSP (superseded by DMARC)
+score DKIM_ADSP_ALL 2.5
+score DKIM_ADSP_DISCARD 5.7
+score DKIM_ADSP_NXDOMAIN 2.0
+
+# DMARC fail
+header CUST_DMARC_FAIL Authentication-Results =~ /{{mailname_regex}}; dmarc=fail/
+score CUST_DMARC_FAIL 5.0
+
+# DMARC pass
+header CUST_DMARC_PASS Authentication-Results =~ /{{mailname_regex}}; dmarc=pass/
+score CUST_DMARC_PASS -1.0
+
+# DKIM failure
+meta CUST_DKIM_SIGNED_INVALID DKIM_SIGNED && !(DKIM_VALID || DKIM_VALID_AU)
+score CUST_DKIM_SIGNED_INVALID 4.9
+
+# BEGIN: configs from pillar
+{% for setting, values in salt['pillar.get']('spamassassin:local', []).items() -%}
+{% for value in values -%}
+{{setting}}	{{value}}
+{% endfor -%}
+{% endfor -%}
+# END: configs from pillar

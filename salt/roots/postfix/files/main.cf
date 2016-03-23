@@ -74,8 +74,45 @@ tls_ssl_options = NO_COMPRESSION
 ###
 ### Spam control
 ###
-smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
-smtpd_recipient_restrictions = check_policy_service unix:private/policy-spf
+smtpd_delay_reject = no
+smtpd_relay_restrictions =
+	permit_mynetworks
+	permit_sasl_authenticated
+	reject_unauth_destination
+smtpd_sender_restrictions =
+	reject_non_fqdn_sender
+	reject_unknown_sender_domain
+smtpd_helo_restrictions =
+	reject_invalid_helo_hostname
+	reject_non_fqdn_helo_hostname
+	reject_unknown_helo_hostname
+	check_helo_access hash:/etc/postfix/helo_checks
+smtpd_recipient_restrictions =
+	reject_non_fqdn_recipient
+	reject_unknown_recipient_domain
+	permit_mynetworks
+	check_policy_service unix:private/policyd-spf
+	permit
+smtpd_data_restrictions =
+	reject_unauth_pipelining
+	permit
+
+postscreen_greet_banner = Welcome to this lovely server!
+# Enable pre-220 tests
+postscreen_greet_action = enforce
+# Skip after-220 tests if the site is whitelisted, regardless of trustlevel.
+postscreen_dnsbl_sites =
+	list.dnswl.org=127.0.[0..255].0*-1
+	list.dnswl.org=127.0.[0..255].1*-2
+	list.dnswl.org=127.0.[0..255].2*-3
+	list.dnswl.org=127.0.[0..255].3*-4
+	swl.spamhaus.org*-3
+postscreen_dnsbl_whitelist_threshold = -1
+# Enable after-220 tests.  This causes delays for mails from affected sites.
+postscreen_bare_newline_action = enforce
+postscreen_bare_newline_enable = yes
+postscreen_non_smtp_command_enable = yes
+postscreen_pipelining_enable = yes
 
 ## Require that a reply could be sent to the envelope senders
 strict_rfc821_envelopes = yes

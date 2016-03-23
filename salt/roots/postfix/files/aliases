@@ -4,16 +4,13 @@
 mailer-daemon: postmaster
 
 ### RFC 2142 compliance
-
 # Business related mailbox names
 info: root
-
 # Network related
 abuse: root
 trouble: root
 noc: root
 security: root
-
 # Specific services
 postmaster: root
 hostmaster: root
@@ -24,3 +21,6 @@ root: {{admin_mail}}
 {%- endif %}
 admin: root
 nobody: root
+
+### Reporting
+dmarc: postmaster

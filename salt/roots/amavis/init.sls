@@ -10,6 +10,7 @@ amavis:
     - require:
       - pkg: amavis
       - pkg: spamassassin
+    - watch:
       - file: spamassassin config
 
 /etc/amavis/conf.d/50-user:
