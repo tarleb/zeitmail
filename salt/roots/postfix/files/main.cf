@@ -97,6 +97,7 @@ smtpd_data_restrictions =
 	reject_unauth_pipelining
 	permit
 
+postscreen_cache_map = proxy:btree:$data_directory/postscreen_cache
 postscreen_greet_banner = Welcome to this lovely server!
 # Enable pre-220 tests
 postscreen_greet_action = enforce
@@ -127,7 +128,7 @@ mua_client_restrictions =
 mua_helo_restrictions =
 
 ## SPF policy daemon
-policy-spf_time_limit = 3600s
+policyd-spf_time_limit = 3600s
 
 ##
 ## Milters
