@@ -128,7 +128,7 @@ mua_client_restrictions =
 mua_helo_restrictions =
 
 ## SPF policy daemon
-policy-spf_time_limit = 3600s
+policyd-spf_time_limit = 3600s
 
 ##
 ## Milters
