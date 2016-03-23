@@ -19,6 +19,8 @@ UsePAM yes
 # ================
 # Prevent printing the motd twice
 PrintMotd no
+# Don't disclose the exact version/patch-level
+DebianBanner no
 # Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
 
