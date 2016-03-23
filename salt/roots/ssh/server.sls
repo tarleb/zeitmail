@@ -11,15 +11,27 @@ generate ED25519 ssh key:
     - creates: /etc/ssh/ssh_host_ed25519_key
     - user: root
 
+/etc/ssh/sshd_config:
+  file.managed:
+    - source: salt://ssh/files/sshd_config
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: openssh-server
+
 openssh-server:
   pkg.installed: []
   service.running:
     - name: ssh
+    - reload: True
     - require:
       - pkg: openssh-server
+      - file: /etc/ssh/sshd_config
       - cmd: generate RSA ssh key
       - cmd: generate ED25519 ssh key
     - watch:
       - pkg: openssh-server
+      - file: /etc/ssh/sshd_config
       - cmd: generate RSA ssh key
       - cmd: generate ED25519 ssh key
