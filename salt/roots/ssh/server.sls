@@ -1,3 +1,9 @@
+{%- from "zeitmail.jinja" import zeitmail with context %}
+{% if zeitmail.dh.custom_parameters_ssh %}
+include:
+  - .moduli
+{% endif %}
+
 # Generate RSA and ED25519 keys (unless already present)
 generate RSA ssh key:
   cmd.run:
@@ -30,6 +36,9 @@ openssh-server:
       - file: /etc/ssh/sshd_config
       - cmd: generate RSA ssh key
       - cmd: generate ED25519 ssh key
+      {%- if zeitmail.dh.custom_parameters_ssh %}
+      - cmd: generate Diffie-Hellman moduli
+      {%- endif %}
     - watch:
       - pkg: openssh-server
       - file: /etc/ssh/sshd_config

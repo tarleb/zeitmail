@@ -3,6 +3,7 @@ zeitmail:
   bits_security: 128
   dh:
     custom_parameters: no
+    custom_parameters_ssh: no
   dkim:
     sign: yes
   domain:

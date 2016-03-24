@@ -16,6 +16,7 @@ zeitmail:
     ## Whether to generate custom DH parameters.  This can take quite a long
     ## time.  Self-generated parameters are regenerated once a month.
     custom_parameters: no
+    custom_parameters_ssh: no
 
   ## Domain Key Identified Mail signing requires additional TXT records in
   ## DNS.  This is not always possible with some hosts.
