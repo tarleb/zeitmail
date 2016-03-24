@@ -36,16 +36,20 @@ score DKIM_ADSP_DISCARD 5.7
 score DKIM_ADSP_NXDOMAIN 2.0
 
 # DMARC fail
-header CUST_DMARC_FAIL Authentication-Results =~ /{{mailname_regex}}; dmarc=fail/
-score CUST_DMARC_FAIL 5.0
+header __CUST_DMARC_FAIL Authentication-Results =~ /{{mailname_regex}}; dmarc=fail/
+
+meta CUST_NML_DMARC_FAIL	!__VIA_ML && __CUST_DMARC_FAIL
+describe CUST_NML_DMARC_FAIL	DMARC validation failed and not via list
+score CUST_NML_DMARC_FAIL	8.0
 
 # DMARC pass
-header CUST_DMARC_PASS Authentication-Results =~ /{{mailname_regex}}; dmarc=pass/
-score CUST_DMARC_PASS -1.0
+header CUST_DMARC_PASS	Authentication-Results =~ /{{mailname_regex}}; dmarc=pass/
+score CUST_DMARC_PASS	-1.0
 
 # DKIM failure
-meta CUST_DKIM_SIGNED_INVALID DKIM_SIGNED && !(DKIM_VALID || DKIM_VALID_AU)
-score CUST_DKIM_SIGNED_INVALID 4.9
+meta CUST_NML_DKIM_SIGNED_INVALID	!__VIA_ML && !__VIA_RESIGNER && DKIM_SIGNED && !(DKIM_VALID || DKIM_VALID_AU)
+describe CUST_NML_DKIM_SIGNED_INVALID	Invalid DKIM signature, not via mailing list
+score CUST_NML_DKIM_SIGNED_INVALID	4.9
 
 # BEGIN: configs from pillar
 {% for setting, values in salt['pillar.get']('spamassassin:local', []).items() -%}
