@@ -52,7 +52,7 @@ describe CUST_NML_DKIM_SIGNED_INVALID	Invalid DKIM signature, not via mailing li
 score CUST_NML_DKIM_SIGNED_INVALID	4.9
 
 # BEGIN: configs from pillar
-{% for setting, values in salt['pillar.get']('spamassassin:local', []).items() -%}
+{% for setting, values in salt['pillar.get']('spamassassin:local', {}).items() -%}
 {% for value in values -%}
 {{setting}}	{{value}}
 {% endfor -%}
