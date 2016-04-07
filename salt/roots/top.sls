@@ -6,3 +6,4 @@ base:
     - dovecot
     - roundcube
     - powerdns.recursor
+    - powerdns.resolver
