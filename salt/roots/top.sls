@@ -5,3 +5,4 @@ base:
     - postfix
     - dovecot
     - roundcube
+    - powerdns.recursor
