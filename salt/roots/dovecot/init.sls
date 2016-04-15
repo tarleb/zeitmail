@@ -22,7 +22,7 @@ dovecot:
       - file: {{zeitmail.ssl.certificate.key_file}}
 
 {# Config Files #}
-{% for file in ['10-mail.conf', '10-master.conf', '10-ssl.conf',
+{% for file in ['10-auth.conf', '10-mail.conf', '10-master.conf', '10-ssl.conf',
                 '15-lda.conf', '15-mailboxes.conf', '20-lmtp.conf',
                 '90-sieve.conf'] %}
 /etc/dovecot/conf.d/{{file}}:
