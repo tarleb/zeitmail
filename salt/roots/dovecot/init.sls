@@ -6,15 +6,12 @@ include:
 dovecot-core:
   pkg.installed: []
 
-dovecot-imapd:
+{% for extension in ['imapd', 'sieve', 'lmtpd'] %}
+dovecot-{{extension}}:
   pkg.installed:
     - require_in:
       - service: dovecot
-
-dovecot-sieve:
-  pkg.installed:
-    - require_in:
-      - service: dovecot
+{% endfor %}
 
 dovecot:
   service.running:
@@ -24,36 +21,21 @@ dovecot:
       - file: {{zeitmail.ssl.certificate.file}}
       - file: {{zeitmail.ssl.certificate.key_file}}
 
-/etc/dovecot/conf.d/10-master.conf:
+{# Config Files #}
+{% for file in ['10-auth.conf', '10-mail.conf', '10-master.conf', '10-ssl.conf',
+                '15-lda.conf', '15-mailboxes.conf', '20-lmtp.conf',
+                '90-sieve.conf'] %}
+/etc/dovecot/conf.d/{{file}}:
   file.managed:
-    - source: salt://dovecot/files/10-master.conf
+    - source: salt://dovecot/files/{{file}}
     - user: root
     - group: root
     - mode: 644
-    - require:
-      - pkg: dovecot-core
-    - watch_in:
-      - service: dovecot
-
-/etc/dovecot/conf.d/10-ssl.conf:
-  file.managed:
-    - source: salt://dovecot/files/10-ssl.conf
-    - use: /etc/dovecot/conf.d/10-master.conf
     - template: jinja
-    - context:
+    - defaults:
         certificate_file: {{zeitmail.ssl.certificate.file}}
         certificate_key_file: {{zeitmail.ssl.certificate.key_file}}
-    - require:
-      - pkg: dovecot-core
-    - watch_in:
-      - service: dovecot
-
-{# Config Files #}
-{% for file in ['10-mail', '15-lda', '15-mailboxes', '90-sieve'] %}
-/etc/dovecot/conf.d/{{file}}.conf:
-  file.managed:
-    - source: salt://dovecot/files/{{file}}.conf
-    - use: /etc/dovecot/conf.d/10-master.conf
+        postmaster: postmaster@{{zeitmail.domain.mail}}
     - require:
       - pkg: dovecot-core
     - watch_in:
@@ -80,5 +62,7 @@ Compile sieve scripts:
     - user: root
     - group: root
     - umask: "022"
-    - require_in:
+    - require:
       - file: /etc/dovecot/conf.d/90-sieve.conf
+    - require_in:
+      - service: dovecot

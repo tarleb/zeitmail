@@ -23,8 +23,7 @@ smtpd_sasl_path = private/auth
 virtual_alias_maps = hash:/etc/postfix/virtual
 
 ## User mailboxes
-mailbox_command = /usr/lib/dovecot/dovecot-lda -f "$SENDER" -a "$ORIGINAL_RECIPIENT"
-mailbox_size_limit = 0
+mailbox_transport_maps = hash:/etc/postfix/mailbox_transport
 
 ## User interaction parameters
 smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
