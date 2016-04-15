@@ -62,5 +62,7 @@ Compile sieve scripts:
     - user: root
     - group: root
     - umask: "022"
-    - require_in:
+    - require:
       - file: /etc/dovecot/conf.d/90-sieve.conf
+    - require_in:
+      - service: dovecot
