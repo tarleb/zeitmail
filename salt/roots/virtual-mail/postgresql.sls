@@ -1,9 +1,12 @@
+{% from slspath ~ '/settings.jinja' import virtual_mail with context %}
+{% set pgsql = virtual_mail.postgresql %}
+
 include:
   - postgresql
 
 virtual mail postgres user:
   postgres_user.present:
-    - name: vmail
+    - name: {{pgsql.user}}
     - createdb: no
     - createuser: no
     - encrypted: no
@@ -14,7 +17,7 @@ virtual mail postgres user:
 
 virtual mail postgres database:
   postgres_database.present:
-    - name: virtual_mail
+    - name: {{pgsql.database}}
     - owner: vmail
     - owner_recurse: yes
     - encoding: UTF8
@@ -22,4 +25,4 @@ virtual mail postgres database:
     - lc_collate: en_US.UTF-8
     - require:
       - service: postgresql
-      - postgres_user: vmail
+      - postgres_user: {{pgsql.user}}

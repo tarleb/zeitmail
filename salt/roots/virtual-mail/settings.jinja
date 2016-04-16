@@ -1,0 +1,7 @@
+{% import_yaml slspath ~ '/defaults.yaml' as virtual_mail_defaults %}
+{%
+set virtual_mail = salt['pillar.get'](
+    'virtual_mail',
+    default=virtual_mail_defaults.virtual_mail,
+    merge=True)
+%}
