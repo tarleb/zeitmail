@@ -1,5 +1,8 @@
 # Configs for virtual mail
 
+include:
+  - .postgresql
+
 virtual mail user and group:
   group.present:
     - name: vmail
