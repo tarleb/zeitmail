@@ -62,3 +62,37 @@ run migrations:
       # Ensure correct database/relations permissions
       - postgres_user: {{pgsql.user}}
       - postgres_database: {{pgsql.database}}
+
+Postgres mail users map:
+  file.append:
+    - name: /etc/postgresql/9.4/main/pg_ident.conf
+    - text:
+      - "# MAPNAME       SYSTEM-USERNAME         PG-USERNAME"
+      - "mailmap         root                    {{pgsql.user}}"
+      - "mailmap         vmail                   {{pgsql.user}}"
+      - "mailmap         postfix                 {{pgsql.user}}"
+      - "mailmap         dovecot                 {{pgsql.user}}"
+    - watch_in:
+      - service: postgresql
+
+Postgres client authentication configs:
+  file.line:
+    - name: /etc/postgresql/9.4/main/pg_hba.conf
+    # Allow mail users to connect as the virtual user
+    - content: >
+        local   {{pgsql.database}}    all                     peer map=mailmap
+    - mode: ensure
+    - location: start
+    - after: "local *all *postgres"
+    - watch_in:
+      - service: postgresql
+      - file: Postgres client authentication config file permissions
+
+Postgres client authentication config file permissions:
+  file.managed:
+    - name: /etc/postgresql/9.4/main/pg_hba.conf
+    - user: postgres
+    - group: postgres
+    - mode: "0640"
+    - require_in:
+      - service: postgresql
