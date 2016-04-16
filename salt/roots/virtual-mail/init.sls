@@ -3,6 +3,7 @@
 include:
   - .postgresql
   - .postfix
+  - .dovecot
 
 virtual mail user and group:
   group.present:

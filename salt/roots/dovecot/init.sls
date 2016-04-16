@@ -24,7 +24,7 @@ dovecot:
 {# Config Files #}
 {% for file in ['10-auth.conf', '10-mail.conf', '10-master.conf', '10-ssl.conf',
                 '15-lda.conf', '15-mailboxes.conf', '20-lmtp.conf',
-                '90-sieve.conf'] %}
+                '90-sieve.conf', 'auth-system.conf.ext'] %}
 /etc/dovecot/conf.d/{{file}}:
   file.managed:
     - source: salt://dovecot/files/{{file}}
@@ -35,6 +35,8 @@ dovecot:
     - defaults:
         certificate_file: {{zeitmail.ssl.certificate.file}}
         certificate_key_file: {{zeitmail.ssl.certificate.key_file}}
+        mailbox_system_users: {{zeitmail.mailboxes.system_users}}
+        mailbox_virtual_users: {{zeitmail.mailboxes.virtual_users}}
         postmaster: postmaster@{{zeitmail.domain.mail}}
     - require:
       - pkg: dovecot-core
