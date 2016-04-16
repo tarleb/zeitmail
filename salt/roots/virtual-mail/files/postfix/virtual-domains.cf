@@ -1,0 +1,4 @@
+user = {{user}}
+dbname = {{database}}
+hosts = unix:/var/run/postgresql
+query = SELECT 1 FROM domains WHERE name = '%s'

@@ -19,9 +19,6 @@ recipient_delimiter = +
 smtpd_sasl_type = dovecot
 smtpd_sasl_path = private/auth
 
-## Aliases
-virtual_alias_maps = hash:/etc/postfix/virtual
-
 ## User mailboxes
 mailbox_transport_maps = hash:/etc/postfix/mailbox_transport
 
@@ -139,6 +136,20 @@ non_smtpd_milters =
 	{%- if dkim_sign -%}
 	inet:localhost:10026
 	{%- endif %}
+
+##
+## Virtual Mail
+##
+virtual_alias_maps = hash:/etc/postfix/virtual
+{%- if virtual_user_mailboxes %}
+	proxy:pgsql:/etc/postfix/pgsql/virtual-aliases.cf
+	proxy:pgsql:/etc/postfix/pgsql/virtual-users.cf
+virtual_mailbox_domains =
+	proxy:pgsql:/etc/postfix/pgsql/virtual-domains.cf
+virtual_mailbox_maps =
+	proxy:pgsql:/etc/postfix/pgsql/virtual-users.cf
+{%- endif %}
+virtual_transport = lmtp:unix:private/dovecot-lmtp
 
 # Misc
 readme_directory = no

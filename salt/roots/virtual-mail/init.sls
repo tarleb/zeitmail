@@ -2,6 +2,7 @@
 
 include:
   - .postgresql
+  - .postfix
 
 virtual mail user and group:
   group.present:

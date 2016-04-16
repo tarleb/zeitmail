@@ -81,6 +81,7 @@ postmap /etc/postfix/virtual:
         dkim_sign: {{zeitmail.dkim.sign}}
         fqdn: {{salt['grains.get']('fqdn')}}
         mailname: {{zeitmail.domain.mail}}
+        virtual_user_mailboxes: {{zeitmail.mailboxes.virtual_users}}
     - require:
       - pkg: postfix
     - watch_in:
