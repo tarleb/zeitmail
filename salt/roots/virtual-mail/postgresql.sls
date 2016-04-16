@@ -3,6 +3,7 @@
 
 include:
   - postgresql
+  - dogfish
 
 virtual mail postgres user:
   postgres_user.present:
@@ -26,3 +27,38 @@ virtual mail postgres database:
     - require:
       - service: postgresql
       - postgres_user: {{pgsql.user}}
+
+/etc/zeitmail:
+  file.directory:
+    - user: root
+    - group: root
+    - dir_mode: "0755"
+
+virtual mail postgres migrations:
+  file.recurse:
+    - name: /etc/zeitmail/postgres-migrations
+    - source: salt://{{slspath}}/files/postgres-migrations
+    - clean: yes
+    - exclude_pat: schema.sql
+    - user: postgres
+    - group: postgres
+    - file_mode: "0640"
+    - dir_mode: "0750"
+    - template: jinja
+    - defaults:
+        vmail_user: {{pgsql.user}}
+    - require:
+      - file: /etc/zeitmail
+
+run migrations:
+  cmd.wait:
+    - name: dogfish migrate {{pgsql.database}}
+    - user: postgres
+    - group: postgres
+    - umask: "027"
+    - cwd: /etc/zeitmail
+    - watch:
+      - file: virtual mail postgres migrations
+      # Ensure correct database/relations permissions
+      - postgres_user: {{pgsql.user}}
+      - postgres_database: {{pgsql.database}}
