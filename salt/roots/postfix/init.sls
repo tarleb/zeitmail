@@ -1,6 +1,7 @@
 {%- from "zeitmail.jinja" import zeitmail with context -%}
 include:
   - .policyd-spf
+  - .transport
   - amavis
   - certificates
   - diffie-hellman-parameters
