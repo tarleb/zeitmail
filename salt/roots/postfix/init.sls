@@ -82,6 +82,7 @@ postmap /etc/postfix/virtual:
         dkim_sign: {{zeitmail.dkim.sign}}
         fqdn: {{salt['grains.get']('fqdn')}}
         mailname: {{zeitmail.domain.mail}}
+        mailboxes_virtual_users: {{zeitmail.mailboxes.virtual_users}}
     - require:
       - pkg: postfix
     - watch_in:
@@ -135,3 +136,15 @@ postmap /etc/postfix/virtual:
     - umask: 022
     - watch:
       - file: /etc/postfix/helo_checks
+
+/etc/postfix/login_maps.pcre:
+  file.managed:
+    - contents: |
+        /^(.*)@{{zeitmail.domain.mail|replace('.', '\\.')}}$/	${1}
+        {%- if zeitmail.mailboxes.virtual_users %}
+        /^(.*)$/	${1}
+        {%- endif %}
+    - use:
+      - file: /etc/mailname
+    - watch_in:
+      - service: postfix

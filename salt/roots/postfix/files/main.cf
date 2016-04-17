@@ -19,9 +19,6 @@ recipient_delimiter = +
 smtpd_sasl_type = dovecot
 smtpd_sasl_path = private/auth
 
-## Aliases
-virtual_alias_maps = hash:/etc/postfix/virtual
-
 ## User mailboxes
 mailbox_transport_maps = hash:/etc/postfix/mailbox_transport
 
@@ -78,9 +75,6 @@ smtpd_relay_restrictions =
 	permit_mynetworks
 	permit_sasl_authenticated
 	reject_unauth_destination
-smtpd_sender_restrictions =
-	reject_non_fqdn_sender
-	reject_unknown_sender_domain
 smtpd_helo_restrictions =
 	reject_invalid_helo_hostname
 	reject_non_fqdn_helo_hostname
@@ -121,13 +115,26 @@ disable_vrfy_command = yes
 ## Really bad spambots skip the HELO, so we require it.
 smtpd_helo_required = yes
 
+# Prevent malformed senders
+smtpd_sender_restrictions = reject_non_fqdn_sender
+# Maps used to stop sender address forgeries.  Used only for mail delivered
+# via submission.
+smtpd_sender_login_maps = pcre:/etc/postfix/login_maps.pcre
+
+##
 ## Mail User Agent restrictions (used in master.cf)
+##
+# Prevent users from forging addresses of others on the same host.
 mua_sender_restrictions =
+	reject_non_fqdn_sender
+	reject_unknown_sender_domain
+	reject_authenticated_sender_login_mismatch
 mua_client_restrictions =
 mua_helo_restrictions =
 
 ## SPF policy daemon
 policyd-spf_time_limit = 3600s
+
 
 ##
 ## Milters
@@ -139,6 +146,20 @@ non_smtpd_milters =
 	{%- if dkim_sign -%}
 	inet:localhost:10026
 	{%- endif %}
+
+##
+## Virtual Mail
+##
+virtual_alias_maps = hash:/etc/postfix/virtual
+{%- if mailboxes_virtual_users %}
+	proxy:pgsql:/etc/postfix/pgsql/virtual-aliases.cf
+	proxy:pgsql:/etc/postfix/pgsql/virtual-users.cf
+virtual_mailbox_domains =
+	proxy:pgsql:/etc/postfix/pgsql/virtual-domains.cf
+virtual_mailbox_maps =
+	proxy:pgsql:/etc/postfix/pgsql/virtual-users.cf
+{%- endif %}
+virtual_transport = lmtp:unix:private/dovecot-lmtp
 
 # Misc
 readme_directory = no

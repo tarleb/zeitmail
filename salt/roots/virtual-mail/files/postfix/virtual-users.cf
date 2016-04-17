@@ -1,0 +1,4 @@
+user = {{user}}
+dbname = {{database}}
+hosts = unix:/var/run/postgresql
+query = SELECT concat(username, '@', name) AS email FROM users LEFT JOIN domains ON users.domain_id = domains.id WHERE concat(username, '@', name) = '%s'

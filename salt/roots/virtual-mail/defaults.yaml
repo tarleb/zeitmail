@@ -1,0 +1,4 @@
+virtual_mail:
+  postgresql:
+    user: vmail
+    database: virtual_mail

@@ -1,0 +1,3 @@
+[submodule "dogfish"]
+	path = salt/roots/dogfish/files
+	url = https://github.com/dwb/dogfish

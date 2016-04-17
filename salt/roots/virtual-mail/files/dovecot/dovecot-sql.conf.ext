@@ -1,0 +1,63 @@
+# This file is commonly accessed via passdb {} or userdb {} section in
+# conf.d/auth-sql.conf.ext
+
+# This file is opened as root, so it should be owned by root and mode 0600.
+#
+# http://wiki2.dovecot.org/AuthDatabase/SQL
+
+# Database driver: mysql, pgsql, sqlite
+driver = pgsql
+
+# Database connection string.
+connect = host=/var/run/postgresql dbname={{pg_database}} user={{pg_user}}
+
+# Default password scheme.
+#
+# List of supported schemes is in
+# http://wiki2.dovecot.org/Authentication/PasswordSchemes
+#
+default_pass_scheme = SHA512-CRYPT
+
+# passdb query to retrieve the password. It can return fields:
+#   password - The user's password. This field must be returned.
+#   user - user@domain from the database. Needed with case-insensitive lookups.
+#   username and domain - An alternative way to represent the "user" field.
+#
+# The "user" field is often necessary with case-insensitive lookups to avoid
+# e.g. "name" and "nAme" logins creating two different mail directories. If
+# your user and domain names are in separate fields, you can return "username"
+# and "domain" fields instead of "user".
+#
+# The query can also return other fields which have a special meaning, see
+# http://wiki2.dovecot.org/PasswordDatabase/ExtraFields
+#
+# Commonly used available substitutions (see http://wiki2.dovecot.org/Variables
+# for full list):
+#   %u = entire user@domain
+#   %n = user part of user@domain
+#   %d = domain part of user@domain
+#
+# Note that these can be used only as input to SQL query. If the query outputs
+# any of these substitutions, they're not touched. Otherwise it would be
+# difficult to have eg. usernames containing '%' characters.
+#
+password_query = \
+  SELECT \
+    username, password, name AS domain, \
+    5000 AS uid, 5000 AS gid, '/var/vmail/%d/%n' AS home  \
+  FROM users LEFT JOIN domains ON users.domain_id = domains.id \
+  WHERE username = '%n' and domains.name = '%d'
+
+# userdb query to retrieve the user information. It can return fields:
+#   uid - System UID (overrides mail_uid setting)
+#   gid - System GID (overrides mail_gid setting)
+#   home - Home directory
+#   mail - Mail location (overrides mail_location setting)
+# user_query = \
+#   SELECT '/var/vmail/%d/%n' AS home, 5000 AS uid, 5000 AS gid \
+#   FROM users WHERE email = '%u'
+
+# Query to get a list of all usernames.
+# iterate_query = \
+#   SELECT username, name as domain \
+#   FROM users LEFT JOIN domains ON users.domain_id = domains.id

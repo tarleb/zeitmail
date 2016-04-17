@@ -33,6 +33,29 @@ zeitmail:
     additional:
       - {{'www.' ~ salt['grains.get']('domain')}}
 
+  ## Mailbox settings.  This handles which type of users gets mailboxes
+  ## (i.e. the normal, expected functionality).
+  ##
+  ## System users are those listed in /etc/passwd. They only get a real
+  ## mailbox if they appear to be "normal" users (i.e. no daemon users etc.)
+  ##
+  ## Virtual users have all their access details saved in a RDBMS like
+  ## PostgreSQL.  They cannot only access mail, not login into any other
+  ## service.
+  ##
+  ## Enabling both is possible, but may lead to unexpected results, as system
+  ## users can receive mail on ALL virtual domains. I.e. if the canonical
+  ## domain is zeitmail.example, and a virtual domain `secure-mail.example`
+  ## has been configured, a user `john` would be reachable through
+  ## `john@zeitmail.example` AND `john@secure-mail.example`.
+  ##
+  ## The most secure setting is to have virtual mail users only and to forward
+  ## mail for system users to a virtual account.  Set separate passwords for
+  ## maximum security.
+  mailboxes:
+    system_users: yes
+    virtual_users: no
+
   ## SSL/TLS certificate settings
   ssl:
     certificate:

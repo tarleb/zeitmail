@@ -11,6 +11,9 @@ zeitmail:
     mail: {{salt['grains.get']('domain')}}
     additional:
       - {{'www.' ~ salt['grains.get']('domain')}}
+  mailboxes:
+    system_users: yes
+    virtual_users: no
   ssl:
     certificate:
       ca: self-signed
