@@ -1,4 +1,4 @@
-> Security only works if the secure way also happens to be the easy way
+> Security only works if the secure way also happens to be the easy way.
 >
 > – <cite>[Second Immutable Law of Security Administration](https://technet.microsoft.com/en-us/library/cc722488)</cite>
 
@@ -78,8 +78,18 @@ The `salt-ssh` command has to be run every config changes have been made.
 
 ## References and Acknowledgments
 
-[BetterCrypto](https://bettercrypto.org) is a good starting point for admins
-seeking to harden they servers.
+This project would not be possible without the many, many helpful resources
+available on the net.  Great thanks to the authors of the following articles,
+and all the others I haven't mentioned.
+
+  - The [ISPMail tutorial](https://workaround.org/ispmail/jessie) by Christoph
+    Haas is a great place to learn about mail server basics.
+  - [BetterCrypto](https://bettercrypto.org) is a good starting point for
+    admins seeking to harden they servers.
+  - DMARC spam filter configs were inspired by an
+    [article by Skelleton](https://www.skelleton.net/2015/03/21/how-to-eliminate-spam-and-protect-your-name-with-dmarc/)
+  - [Postfix](https://postfix.org) has great documentation and many good
+    READMEs.
 
 
 ## License
