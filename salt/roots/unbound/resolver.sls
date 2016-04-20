@@ -1,5 +1,5 @@
-{% from "powerdns/settings.jinja" import powerdns with context %}
-{% set resolver = powerdns.resolver %}
+{% from slspath ~ "/settings.jinja" import unbound with context %}
+{% set resolver = unbound.resolver %}
 /etc/resolv.conf:
   file.managed:
     - source: salt://{{slspath}}/files/resolv.conf
