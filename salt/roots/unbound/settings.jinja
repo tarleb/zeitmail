@@ -1,0 +1,7 @@
+{% import_yaml slspath ~ '/defaults.yaml' as unbound_defaults %}
+{%
+set unbound = salt['pillar.get'](
+    'unbound',
+    default=unbound_defaults.unbound,
+    merge=True)
+%}

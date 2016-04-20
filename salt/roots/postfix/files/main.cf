@@ -40,7 +40,9 @@ smtp_tls_loglevel = 1
 smtpd_tls_loglevel = 1
 smtp_tls_note_starttls_offer = yes
 smtpd_tls_received_header = yes
-smtp_tls_security_level = may
+# Opportunistic DANE
+smtp_dns_support_level = dnssec
+smtp_tls_security_level = dane
 smtpd_tls_security_level = may
 # Export ciphers are next to useless.  Require somewhat decent encryption.
 smtp_tls_ciphers = medium

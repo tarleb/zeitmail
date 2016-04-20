@@ -1,0 +1,6 @@
+unbound:
+  resolver:
+    domain: {{salt['grains.get']('domain')}}
+    nameservers:
+      - '::1'
+    searchpaths: []
