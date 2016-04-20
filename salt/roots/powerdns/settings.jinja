@@ -1,0 +1,7 @@
+{% import_yaml slspath ~ '/defaults.yaml' as powerdns_defaults %}
+{%
+set powerdns = salt['pillar.get'](
+    'powerdns',
+    default=powerdns_defaults.powerdns,
+    merge=True)
+%}

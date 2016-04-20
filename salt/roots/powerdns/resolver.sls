@@ -1,3 +1,5 @@
+{% from "powerdns/settings.jinja" import powerdns with context %}
+{% set resolver = powerdns.resolver %}
 /etc/resolv.conf:
   file.managed:
     - source: salt://{{slspath}}/files/resolv.conf
@@ -6,6 +8,6 @@
     - group: root
     - mode: 6444
     - defaults:
-        domain: {{salt['pillar.get']('powerdns:resolver:domain', salt['grains.get']('domain'))}}
-        nameservers: {{salt['pillar.get']('powerdns:resolver:nameservers', ['::1'])}}
-        searchpaths: {{salt['pillar.get']('powerdns:resolver:searchpaths', [])}}
+        domain: {{resolver.domain}}
+        nameservers: {{resolver.nameservers|yaml}}
+        searchpaths: {{resolver.searchpaths|yaml}}
