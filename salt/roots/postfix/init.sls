@@ -140,7 +140,7 @@ postmap /etc/postfix/virtual:
 /etc/postfix/login_maps.pcre:
   file.managed:
     - contents: |
-        /^(.*)@{{zeitmail.domain.mail|replace('.', '\\.')}}$/	${1}
+        /^([^@+]*)(\+[^@]*)?@{{zeitmail.domain.mail|replace('.', '\\.')}}$/	${1}
         {%- if zeitmail.mailboxes.virtual_users %}
         /^(.*)$/	${1}
         {%- endif %}
