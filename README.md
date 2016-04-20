@@ -62,14 +62,13 @@ can simply be merged into the code base.
     # Grab the code
     git clone https://github.com/tarleb/zeitmail
 
-    # Use default config as starting point
-    cd zeitmail
-    cp salt/pillar/zeitmail-defaults.sls salt/pillar/zeitmail.sls
-
-    # Update settings
+    # Optional: Configure via salt pillars (YAML syntax)
     edit zeitmail/salt/pillar/zeitmail.sls
-    edit zeitmail/salt/roster
+    # Optional: Load changed configs
+    edit zeitmail/salt/pillar/top.sls
 
+    # Specify details of your (soon-to-be) mail server
+    edit zeitmail/salt/roster
     # Provision the server
     salt-ssh name-given-in-roster-file state.highstate
 
