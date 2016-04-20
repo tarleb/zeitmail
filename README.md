@@ -12,19 +12,23 @@ security settings and reduce the security of mail sent through these servers
 and sometimes even of the whole system.  This project offers an easy way to
 setup a feature-full mail server with good defaults and decent security.
 
-Zeitmail is a tool to manage mail servers. It is a collection of installation
-scripts and settings to quickly provision a new machine.  If at some point you
+Zeitmail is a tool to setup and manage mail servers. It secures the proper
+installation of software packages.  It configures the services in order to
+quickly and securely provision a new machine.
+
+The design goal of zeitmail is to give system administrators all the freedom
+and power required to keep them safe, secure, and happy.  If at some point you
 decide that you'd rather manage the server manually or with a different tool,
-there is nothing tying you to zeitmail, preventing any kind of lock-in.  If
-you like zeitmail and continue using it, it will help to keep you safe.
+there is nothing tying you to zeitmail.  We take great care to prevente any
+kind of lock-in, so sysadmins are always in full control.
 
-This isn't a panacea, security is more than running a single command and then
-forgetting about the machine.  The most secure environments are the
-well-managed ones.  Zeitmail is here to offer a very good head-start, the rest
-is up to you.
+Users should be aware that zeitmail isn't a panacea.  Security is more than
+running a single command and then forgetting about the machine.  The most
+secure environments are the well-managed ones.  Zeitmail is here to offer a
+very good head-start, the rest is up to you.
 
 
-## Features
+## Features Overview
 
 With zeitmail, one can
 
@@ -37,18 +41,35 @@ Automatic deployment is currently limited to servers running Debian Jessie.
 
 ### Mail sending and receiving
 
-Postfix with sane defaults and decent encryption.  Checker for SPF, DKIM, and
-DMARC policies help to determine the trustworthyness of mail; Amavis and
-SpamAssassin help to mark spam; Dovecot Sieve makes it easy to filter on mail.
-IMAP mailboxes via Dovecot.
+At the heard of the system, the Postfix MTA is setup to send and receive mail.
+It uses sane defaults suitable for most single-server installations and
+ensures a heightened level of mail encryption in transit.  Forged mail is
+detected using SPF, DKIM, and DMARC; this helps to establish the
+trustworthyness of incoming mail.  Spam-clients are deflected by the
+*postscreen* service, while ensuring prompt delivery of legitimate mail by
+using whitelist serivces.  Mail is also scanned for spam using the fast and
+flexible services Amavis and SpamAssassin; Dovecot Sieve filters mail and
+keeps spam out of your inbox.  The received mail can be accessed and managed
+using IMAP.
 
 ### Webmail
 
-Roundcube running on Nginx and PostgreSQL.
+Roundcube running on Nginx and PostgreSQL.  The webserver is configured with a
+strong focus on security.  The [SSLLabs test](https://www.ssllabs.com/ssltest/)
+rates the server at *A+* if the `letsencrypt` option has been enabled.  The
+webmail site receives an *A* rating on <https://securityheaders.io>.
 
 ### Security
 
 Secure settings and strong encryption for all services.
+
+### Virtual Mail
+
+Virtual mail addresses can be enabled via a simple config option.  Virtual
+addresses and accounts can be added and managed using entries in PostgreSQL
+tables.  The underlying database schema can easily be adapted using SQL
+migrations.  Migrations are performed using
+[dogfish](https://github.com/dwb/dogfish).
 
 
 ## Installation
@@ -70,16 +91,18 @@ can simply be merged into the code base.
     # Specify details of your (soon-to-be) mail server
     edit zeitmail/salt/roster
     # Provision the server
-    salt-ssh name-given-in-roster-file state.highstate
+    salt-ssh NAME-GIVEN-IN-ROSTER-FILE state.highstate
 
-The `salt-ssh` command has to be run every config changes have been made.
+The `salt-ssh` command has to be re-run every time config changes have been
+made.
 
 
 ## References and Acknowledgments
 
 This project would not be possible without the many, many helpful resources
-available on the net.  Great thanks to the authors of the following articles,
-and all the others I haven't mentioned.
+available on the net.  Great thanks to all the authors of the great software
+packages used by zeitmail.  Many thanks also to authors of the following
+articles, and all the others I forgot to mention here.
 
   - The [ISPMail tutorial](https://workaround.org/ispmail/jessie) by Christoph
     Haas is a great place to learn about mail server basics.
@@ -93,7 +116,7 @@ and all the others I haven't mentioned.
 
 ## License
 
-ZeITMail – secure mail made easy.
+Zeitmail – secure mail made easy.
 Copyright (C) 2016  Albert Krewinkel
 
 This program is free software: you can redistribute it and/or modify
